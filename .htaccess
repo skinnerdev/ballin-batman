@@ -1,0 +1,34 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /profile.php?username=$1
+<Files 403.shtml>
+order allow,deny
+allow from all
+</Files>
+
+# CSS and JS expiration: 1 month after request
+ExpiresByType text/css "now plus 1 month"
+ExpiresByType application/javascript "now plus 1 month"
+ExpiresByType application/x-javascript "now plus 1 month"
+
+# Image files expiration: 1 month after request
+ExpiresByType image/bmp "now plus 1 month"
+ExpiresByType image/gif "now plus 1 month"
+ExpiresByType image/jpeg "now plus 1 month"
+ExpiresByType image/jp2 "now plus 1 month"
+ExpiresByType image/pipeg "now plus 1 month"
+ExpiresByType image/png "now plus 1 month"
+ExpiresByType image/svg+xml "now plus 1 month"
+ExpiresByType image/tiff "now plus 1 month"
+ExpiresByType image/vnd.microsoft.icon "now plus 1 month"
+ExpiresByType image/x-icon "now plus 1 month"
+ExpiresByType image/ico "now plus 1 month"
+ExpiresByType image/icon "now plus 1 month"
+ExpiresByType text/ico "now plus 1 month"
+ExpiresByType application/ico "now plus 1 month"
+ExpiresByType image/vnd.wap.wbmp "now plus 1 month"
+ExpiresByType application/vnd.wap.wbxml "now plus 1 month"
+ExpiresByType application/smil "now plus 1 month"
+
+SetEnv TZ America/New_York
