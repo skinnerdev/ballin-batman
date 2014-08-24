@@ -30,9 +30,7 @@ function recover($mode, $email) {
 	} else if ($mode == 'password') {
 		$generated_password = substr(md5(rand(999,999999)), 0, 8);
 		change_password($user_data['user_id'], $generated_password);
-		
 		update_user($user_data['user_id'], array('password_recover' => '1'));
-		
 		email($email, 'Your Password Recovery - Factionizer', "Hello " . $user_data['first_name'] . ",\n\nThank you for using the Factionizer.  Your password has been reset.  Once you log in with this new password, you will be prompted to change it.\n Your new password is:\n\n" . $generated_password . "\n\n   ---Factionizer");
 	} else echo 'Error.';
 	
@@ -64,15 +62,17 @@ function activate($email, $email_code) {
 
 function change_password($user_id, $password) {
 	$user_id = (int)$user_id;
-	$password = md5($password);
-	
+	$password = hash_password($password);
 	mysql_query("UPDATE `users` SET `password` = '$password', `password_recover` = 0 WHERE `user_id` = $user_id");
-
 }
 
 function register_user($register_data) {
 	array_walk($register_data, 'array_sanitize');
 	$passwordHash = hash_password($register_data['password']);
+	if ($passwordHash == false) {
+		echo "There was a problem registering your account. Please try again.";
+		return false;
+	}
 	$register_data['password'] = $passwordHash;		
 	$fields = '`' . implode('`, `', array_keys($register_data)) . '`';
 	$data = '\'' . implode('\', \'', $register_data) . '\'';
@@ -160,31 +160,18 @@ function user_id_from_email($email) {
 }
 
 function login($username, $password) {
-	$user_id = user_id_from_username($username);
-	
 	$username = sanitize($username);
-	$password = hash_password($password);
-	$q = "SELECT COUNT(`user_id`) FROM `users` WHERE `username` = '$username' AND `password` = '$password'";
-	return (mysql_result(mysql_query($q), 0) == 1) ? $user_id : false;
-	//$query = "SELECT COUNT(`user_id`) FROM `users` WHERE `username` = '$username' AND `password` = '$password'";
-	//if (mysqli_query($connection, $query) == 1) {return $user_id;} else {return false;}
-	
+	$q = "
+		SELECT * FROM `users` WHERE `username` = '$username' LIMIT 1;
+	";
+	$data = mysql_fetch_assoc(mysql_query($q));
+	if (password_verify($password, $data['password'])) {
+		return $data['user_id'];
+	}
+	return false;
 }
 
-function hash_password($string) {
-	if (function_exists('sha1')) {
-		$return = sha1($string);
-		return $return;
-	}
-
-	if (function_exists('mhash')) {
-		return bin2hex(mhash(MHASH_SHA256, $string));
-	}
-
-	if (function_exists('hash')) {
-		return hash('sha256', $string);
-	}
-	return md5($string);
+function hash_password($password) {
+	$return = password_hash($password, PASSWORD_BCRYPT);
+	return $return;
 }
-
-?>

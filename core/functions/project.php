@@ -79,6 +79,10 @@ function get_faction_data($project_id) {
 	$faction_data = array();
 	$sql = "SELECT `faction_id`,`faction_name`,`faction_num`, `deleted` FROM `factions` WHERE `project_id` = '$project_id' ORDER BY `faction_id`";
 	$result = mysql_query($sql);
+	while($row = mysql_fetch_assoc($result)){
+	$data[] = $row; 
+	//data appears as $bearer_data[0]['character_id']   range is 0 to 11
+	}
 	$num=mysql_numrows($result);  //counts the rows
 	$i=0;
 	while ($i < $num) {
@@ -160,11 +164,6 @@ function create_project($project_data, $project_name, $user_id, $faction_qty) {
 	}
 }
 
-function set_active_project($project_name, $user_id) {
-	$project_id = mysql_result(mysql_query("SELECT `project_id` FROM `projects` WHERE `project_name`='$project_name'"), 0);
-	mysql_query("UPDATE `users` SET `active_project`='$project_id' WHERE `user_id` = '$user_id'");; //sets the active project
-}
-
 function create_rand_data($project_id) {
 	$fileName = "names.csv";
 	$csvData = file_get_contents($fileName); 
@@ -223,4 +222,54 @@ function update_rand_names($project_id) {
 	}
 }
 
-?>
+function getProject($id = null) {
+	if (empty($id)) {
+		return false;
+	}
+	$id = sanitize($id);
+	$sql = "SELECT * FROM `projects` WHERE `project_id` = '$id' LIMIT 1;";
+	$result = mysql_query($sql);
+	while ($row = mysql_fetch_assoc($result)) {
+		if ( ! empty($row)) {
+			return $row;
+		}
+	}
+	return false;
+}
+
+function getProjectList() {
+	$q = "
+		SELECT * FROM `projects` WHERE `user_id` = " . $_SESSION['user_id'] .";
+	";
+	$result = mysql_query($q);
+	$projects = array();
+	while ($row = mysql_fetch_assoc($result)) {
+		$projects[] = $row;
+	}
+	return $projects;
+}
+
+function setActiveProject($project_id = null) {
+	if (empty($project_id)) {
+		return false;
+	}
+	$project_id = sanitize($project_id);
+	// Check to make sure current user owns project
+	$q = "
+		SELECT * FROM `projects` WHERE `project_id` = '$project_id' and `user_id` = " . $_SESSION['user_id'] . " LIMIT 1;
+	";
+	$result = mysql_query($q);
+	$project = mysql_fetch_assoc($result);
+	if (empty($project)) {
+		return false;
+	}
+	$q = "
+		UPDATE `users` SET `active_project` = '$project_id' WHERE `user_id` = " . $_SESSION['user_id'] . ";
+	";
+	$result = mysql_query($q);
+	if ($result) {
+		return true;
+	} else {
+		return false;
+	}
+}

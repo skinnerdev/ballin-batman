@@ -1,5 +1,6 @@
 <?php
 	include 'core/init.php';
+	$page = 'contact';
 	include 'includes/overall/overall_header.php';
 	$from		=	"factionizer@factionizer.com";
 	if (isset($_GET['success']) && empty($_GET['success'])) {

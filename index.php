@@ -1,5 +1,6 @@
 <?php
 	include 'core/init.php';
+	$page = 'home';
 	include 'includes/overall/overall_header.php';
 	
 ?>

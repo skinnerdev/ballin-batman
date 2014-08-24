@@ -1,7 +1,15 @@
+<?php
+$home = 'class="selected"';
+$beta = $contact = '';
+if (isset($page)) {
+	$home = '';
+	${$page} = 'class="selected"';
+}
+?>
 <ul class="menu">
-		<li class="selected"><a href="index.php">Home</a></li>
-		<li><a href="beta.php">Beta Signup</a></li>
-		<li><a href="contact.php">Contact us</a></li>
+		<li <?php echo $home;?>><a href="index.php">Home</a></li>
+		<li <?php echo $beta;?>><a href="beta.php">Beta Signup</a></li>
+		<li <?php echo $contact;?>><a href="contact.php">Contact us</a></li>
 		<?php
 			include 'includes/check_connect.php';
 			if (isset($_SESSION['user_id'])) {

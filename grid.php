@@ -98,15 +98,43 @@ foreach ($bearer_data as $character) {
 $bearer_faction = mysql_result(mysql_query("SELECT `faction_name` FROM `factions` WHERE `project_id`='$project_id' && `faction_num`='$bearer'"), 0);
 $receiver_faction = mysql_result(mysql_query("SELECT `faction_name` FROM `factions` WHERE `project_id`='$project_id' && `faction_num`='$receiver'"), 0);
 $faction_data = get_faction_data($project_id);  //data is used to determine if a faction is deleted
+
 $alpha = array('a','b','c','d','e','f','g','h','i','j','k', 'l','m','n','o'); //used in identifying opinion location
+$factionListA = array();
+$factionListB = array();
+for ($number = 1; $number <= 12; $number++) {
+	if (isset($faction_data['faction_id_' . $number])) {
+		if ($faction_data['faction_num_' . $number . '_deleted'] == 0) {
+			$selected = '';
+			if ($number == $bearer) {
+				$selected = 'selected="selected"';
+			}
+			$factionListA[] = '<option ' . $selected . ' value="' . $number . '">' . $faction_data["faction_name_" . $number] . '</option>';
+		}
+	}
+}
+for ($number = 1; $number <= 12; $number++) {
+	if (isset($faction_data['faction_id_' . $number])) {
+		if ($faction_data['faction_num_' . $number . '_deleted'] == 0) {
+			$selected = '';
+			if ($number == $receiver) {
+				$selected = 'selected="selected"';
+			}
+			$factionListB[] = '<option ' . $selected . ' value="' . $number . '">' . $faction_data["faction_name_" . $number] . '</option>';
+		}
+	}
+}
 ?>
 <!DOCTYPE html>
 <html>
 	<head>
+		<!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"> -->
+		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/primary.css">
 		<script src="includes/jquery-1.9.0.min.js"></script>
 		<script type="text/javascript" src="/includes/javascript_grid.js"></script>
 		<script type="text/javascript" src="/includes/colorbox.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<script>
 			$(document).ready(function(){
 				$(".iframe").colorbox();
@@ -116,7 +144,7 @@ $alpha = array('a','b','c','d','e','f','g','h','i','j','k', 'l','m','n','o'); //
 	</head>
 	<body>
 		<div id="container">
-			<h1>The Factionizer</h1>
+			<h1>The Factionizer - Project: <?php echo $activeProject['project_name'];?></h1>
 			<ul class="menu">
 				<li><a href="index.php">Home</a></li>
 				<li><a href="new_project.php">New</a></li>
@@ -127,92 +155,85 @@ $alpha = array('a','b','c','d','e','f','g','h','i','j','k', 'l','m','n','o'); //
 				<li><a href="print.php">Print CC's</a></li>
 			</ul>
 			<div id="grid_container">
-			<form class="faction_picker" action="">
-			How <select class="dropdown" name="bearer">
-			<?php
-			for ($number = 1; $number <= 12; $number++) {
-				if ($faction_data['faction_num_' . $number . '_deleted'] == 0) {
-					$selected = '';
-					if ($number == $bearer) {
-						$selected = 'selected="selected"';
-					}
-					echo '<option ' . $selected . ' value="' . $number . '">' . $faction_data["faction_name_" . $number] . '</option>';
-				}
-			}
-			?>
-			</select> feels about <select class="dropdown" name="receiver">
-			<?php
-			for ($number = 1; $number <= 12; $number++) {
-				if ($faction_data['faction_num_' . $number . '_deleted'] == 0) {
-					$selected = '';
-					if ($number == $receiver) {
-						$selected = 'selected="selected"';
-					}
-					echo '<option ' . $selected . ' value="' . $number . '">' . $faction_data["faction_name_" . $number] . '</option>';
-				}
-			}
-			?>
-			</select> &nbsp; &nbsp;
-			<input class="submit_button" type="submit" value="Update">
-			</form>
-			<br /><br /><br /><br /><br />
-			<div class="block hidden_visible"></div>
-			<div id="columnheader_receiver" class="block faction">
-				<a class="iframe" href="character_card.php?faction_overview=<?php echo $receiver_id;?>">Faction: <?php echo $receiver_faction;?></a>
-			</div>
-			<?php
-			$count = 0;
-			foreach ($receiver_data as $target) :
-				if ($target['deleted']) {
-					continue;
-				}
-				$letter = $alpha[$count];
-				$count++;
-			?>
-				<div class="block <?php echo ($target['deleted']) ? 'hidden' : '';?>" id="columnheader<?php echo $letter;?>"><a class="iframe" href="character_card.php?character=<?php echo $target['character_id'];?>"><?php echo $target['character_name'];?></a></div>
-			<?php endforeach; ?>
-			<span class="clear"></span>
-			<div id="rowheader_receiver" class="block faction"><a class="iframe" href="character_card.php?faction_overview=<?php echo $bearer_id;?>">Faction: <?php echo $bearer_faction;?></a></div>
-			<div id="faction2faction" class="block"><a class="iframe" href="input.php?f2f&bearer=<?php echo $bearer_id;?>&receiver=<?php echo $receiver_id;?>"><?php echo $f2f_opinion_word;?></a></div>
-			<span class="clear"></span>
-			<?php
-			$row = 1;
-			foreach ($display_data as $source) :
-				$count = 0;
-				if ($source['character']['deleted']) {
-					continue;
+				<?php if ( ! empty($factionListA)) : ?>
+				<form class="faction_picker" action="">
+				How <select class="dropdown" name="bearer">
+				<?php
+				foreach ($factionListA as $item) {
+					echo $item;
 				}
 				?>
-				<div id="rowheader<?php echo $row;?>" class="block">
-					<a class="iframe" href="character_card.php?character=<?php echo $source['character']['character_id'];?>"><?php echo $source['character']['character_name'];?></a>
+				</select> feels about <select class="dropdown" name="receiver">
+				<?php
+				foreach ($factionListB as $item) {
+					echo $item;
+				}
+
+				?>
+				</select> &nbsp; &nbsp;
+				<input class="submit_button" type="submit" value="Update">
+				</form>
+				<br /><br /><br /><br /><br />
+				<div class="block hidden_visible"></div>
+				<div id="columnheader_receiver" class="block faction">
+					<a class="iframe" href="character_card.php?faction_overview=<?php echo $receiver_id;?>">Faction: <?php echo $receiver_faction;?></a>
 				</div>
-				<div id="character_to_faction_<?php echo $row;?>" class="block">
-					<a class="iframe" href="input.php?c2f&bearer=<?php echo $source['character']['character_id'];?>&receiver=<?php echo $receiver_id;?>"><?php echo $source['opposite_faction_opinion'];?></a>
-				</div>
-				<?php foreach ($source['targets'] as $target_id => $target) :
+				<?php
+				$count = 0;
+				foreach ($receiver_data as $target) :
 					if ($target['deleted']) {
-						//$class = 'hidden';
 						continue;
 					}
 					$letter = $alpha[$count];
 					$count++;
-					$class = '';
-					?>
-					<div id="block<?php echo $row . $letter;?>" class="block <?php echo $class;?>">
-						<a class="iframe" href="input.php?c2c&bearer=<?php echo $source['character']['character_id'];?>&receiver=<?php echo $target_id;?>"><?php echo $target['opinion'];?></a>
-					</div>
-				<?php endforeach;
-				$row++;
 				?>
+					<div class="block <?php echo ($target['deleted']) ? 'hidden' : '';?>" id="columnheader<?php echo $letter;?>"><a class="iframe" href="character_card.php?character=<?php echo $target['character_id'];?>"><?php echo $target['character_name'];?></a></div>
+				<?php endforeach; ?>
 				<span class="clear"></span>
-			<?php endforeach; ?>
-			<?php /*  ADD BUTTONS (cut into email) */ ?>
-			<div class="columnfaction"></div>
-			<?php for ($number = 0; $number <= 12; $number++) {
-				$letter = $alpha[$number]; ?>
-				<div class="column<?php echo $letter;?>"></div>
-				<div class="row<?php echo $number;?>"></div>
-			<?php } ?>
+				<div id="rowheader_receiver" class="block faction"><a class="iframe" href="character_card.php?faction_overview=<?php echo $bearer_id;?>">Faction: <?php echo $bearer_faction;?></a></div>
+				<div id="faction2faction" class="block"><a class="iframe" href="input.php?f2f&bearer=<?php echo $bearer_id;?>&receiver=<?php echo $receiver_id;?>"><?php echo $f2f_opinion_word;?></a></div>
+				<span class="clear"></span>
+				<?php
+				$row = 1;
+				foreach ($display_data as $source) :
+					$count = 0;
+					if ($source['character']['deleted']) {
+						continue;
+					}
+					?>
+					<div id="rowheader<?php echo $row;?>" class="block">
+						<a class="iframe" href="character_card.php?character=<?php echo $source['character']['character_id'];?>"><?php echo $source['character']['character_name'];?></a>
+					</div>
+					<div id="character_to_faction_<?php echo $row;?>" class="block">
+						<a class="iframe" href="input.php?c2f&bearer=<?php echo $source['character']['character_id'];?>&receiver=<?php echo $receiver_id;?>"><?php echo $source['opposite_faction_opinion'];?></a>
+					</div>
+					<?php foreach ($source['targets'] as $target_id => $target) :
+						if ($target['deleted']) {
+							//$class = 'hidden';
+							continue;
+						}
+						$letter = $alpha[$count];
+						$count++;
+						$class = '';
+						?>
+						<div id="block<?php echo $row . $letter;?>" class="block <?php echo $class;?>">
+							<a class="iframe" href="input.php?c2c&bearer=<?php echo $source['character']['character_id'];?>&receiver=<?php echo $target_id;?>"><?php echo $target['opinion'];?></a>
+						</div>
+					<?php endforeach;
+					$row++;
+					?>
+					<span class="clear"></span>
+				<?php endforeach; ?>
+				<?php /*  ADD BUTTONS (cut into email) */ ?>
+				<div class="columnfaction"></div>
+				<?php for ($number = 0; $number <= 12; $number++) {
+					$letter = $alpha[$number]; ?>
+					<div class="column<?php echo $letter;?>"></div>
+					<div class="row<?php echo $number;?>"></div>
+				<?php } ?>
+				<?php else: ?>
+				No factions configured or all factions deleted.
+				<?php endif; ?>
 			</div>
 		</div>
 	</body>

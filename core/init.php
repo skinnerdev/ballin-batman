@@ -1,8 +1,13 @@
 <?php
+function pr($str) {
+	echo "<pre>";
+	print_r($str);
+	echo "</pre>";
+}
 session_start();
 //error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
-
 require 'database/connect.php';
+require 'functions/password.php';
 require 'functions/general.php';
 require 'functions/users.php';
 require 'functions/project.php';
@@ -20,6 +25,10 @@ if (logged_in() === true) {
 	} else if ($current_file !== 'change_password.php' && $current_file !== 'logout.php' && $user_data['password_recover'] == 1) {
 		echo '<meta HTTP-EQUIV="REFRESH" content="0; url=change_password.php?force">';
 	}
+}
+
+if ( ! empty($user_data['active_project'])) {
+	$activeProject = getProject($user_data['active_project']);
 }
 
 $errors=array();

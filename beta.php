@@ -1,13 +1,10 @@
 <?php
 include 'core/init.php';
+$page = 'beta';
 include 'includes/overall/overall_header.php';
-
-
 ?>
 
 <h1>Beta Test Signup</h1>
-
-
 <?php
 if (logged_in() === false) {
 	echo 'Please register or log in to sign up for the beta!';

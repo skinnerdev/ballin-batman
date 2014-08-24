@@ -1,10 +1,4 @@
 <?php
-function pr($s) {
-	echo "<pre>";
-	print_r($s);
-	echo "</pre>";
-}
-
 include 'core/init.php';
 include 'includes/check_connect.php';
 if (isset($_SESSION['user_id'])) {
@@ -27,8 +21,11 @@ if (isset($_REQUEST['restore_character'])) {
 		<meta name="keywords" content="factionizer, larp, the factionizer, double exposure, dexcon, dreamation, create larp, convention, gaming">
 		<meta name="description" content="A tool for LARP. Create character factions and see their interactions - then print character cards.">
 		<meta charset="UTF-8">	
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/primary.css">
 		<script src="includes/jquery-1.9.0.min.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<!--script src="includes/jquery.jeditable.mini.js"></script-->
 		<script type="text/javascript" src="/includes/javascript_edit.js"></script>
 	</head>
@@ -45,7 +42,7 @@ if (isset($_REQUEST['restore_character'])) {
 	}
 	?>
 	<div id="container">
-		<h1>The Factionizer</h1>
+		<h1>The Factionizer - Project: <?php echo $activeProject['project_name'];?></h1>
 		<ul class="menu">
 			<li><a href="index.php">Home</a></li>
 			<li><a href="new_project.php">New</a></li>
@@ -119,7 +116,7 @@ if (isset($_REQUEST['restore_character'])) {
 			//formats are all in the format: array_name['faction_name_number'] or array_name['faction_number_character_number_function'] (such as name or ID)
 			//additional information for $faction_data['faction_qty']
 			
-			echo '<form action="edit_project.php?submit" method="post">';  //beginning of the form
+			echo '<form action="edit_project.php?submit" method="post" role="form">';  //beginning of the form
 						
 			echo "<h3><p>Project Name: 
 			<input type=\"text\" name=\"project_name\" value=\"" . $project_name . "\"></input>";
