@@ -1,5 +1,69 @@
 <?php
 
+function is_logged_in() {
+	return (isset($_SESSION['user_id'])) ? true : false;
+}
+
+function get_user_data($user_id) {
+	$data = array();
+	$user_id = (int)sanitize($user_id);
+	$func_num_args = func_num_args();
+	$func_get_args = func_get_args();
+	if ($func_num_args > 1) {
+		unset($func_get_args[0]);
+		$fields = '`' . implode('`, `', $func_get_args) . '`';
+		$data = mysql_fetch_assoc(mysql_query("SELECT $fields FROM `users` WHERE `user_id` = $user_id"));  
+		return $data;		
+	}
+	$data = mysql_fetch_assoc(mysql_query("SELECT * FROM `users` WHERE `user_id` = $user_id"));  
+	return $data;	
+}
+
+function is_user_active($username) {
+	$username = sanitize($username);
+	return (mysql_result(mysql_query("SELECT COUNT(`user_id`) FROM `users` WHERE `username` = '$username' AND `active` = 1"), 0) == 1) ? true : false;
+}
+
+function has_access($user_id, $type = 0) {
+	$user_id = (int)$user_id;
+	$type = (int)$type;
+	return (mysql_result(mysql_query("SELECT COUNT(`user_id`) FROM `users` WHERE `user_id` = $user_id AND `type` = $type"), 0) == 1) ? true : false;
+}
+
+function user_count() {
+	return mysql_result(mysql_query("SELECT COUNT(`user_id`) FROM `users` WHERE `active` = 1"), 0);
+}
+
+function user_has_beta() {
+	return (mysql_result(mysql_query("SELECT COUNT(`user_id`) FROM `users` WHERE `user_id` = '{$_SESSION['user_id']}' AND `beta` = 1"), 0) == 1) ? true : false;
+}
+
+function add_user_to_beta($comments) {
+	$from		=	"factionizer@factionizer.com";
+	$subject	=	"Factionizer Beta for $name";
+	$name		= 	$user_data['first_name'];
+	$email		=	$user_data['email'];
+	$comments	=	sanitize($comments);
+	$message = "$name is requesting an invitation to the Factionizer Beta using the email $email and has supplied no additional comments.";
+	if (($comments !== "Comments") && ! empty($comments)) {
+		$message = "$name is requesting an invitation to the Factionizer Beta using the email $email. Additionally, they write:  $comments";
+	}
+	mail($email, $subject, $message, "From: ".$from);
+	mysql_query("UPDATE `users` SET `beta` = 1 WHERE `user_id` = '$session_user_id'");
+}
+
+function get_user_list() {
+	$q = "
+		SELECT * FROM `users`;
+	";
+	$results = mysql_query($q);
+	$users = array();
+	while ($row = mysql_fetch_assoc($results)) {
+		$users[] = $row;
+	}
+	return $users;
+}
+
 function change_profile_image($user_id, $file_temp, $file_extn) {
 	$file_path = 'images/profile/' . substr(md5(time()), 0 ,10) . '.' . $file_extn;
 	move_uploaded_file($file_temp, $file_path);
@@ -15,16 +79,10 @@ function mail_users($subject, $body) {
 	}
 }
 
-function has_access($user_id, $type) {
-	$user_id = (int)$user_id;
-	$type = (int)$type;
-	return (mysql_result(mysql_query("SELECT COUNT(`user_id`) FROM `users` WHERE `user_id` = $user_id AND `type` = 1"), 0) == 1) ? true : false;
-}
-
 function recover($mode, $email) {
 	$mode = sanitize($mode);
 	$email = sanitize($email);
-	$user_data = user_data(user_id_from_email($email), 'user_id', 'first_name', 'username');
+	$user_data = get_user_data(user_id_from_email($email), 'user_id', 'first_name', 'username');
 	if($mode == 'username') {
 		email($email, 'Your Username Recovery - Factionizer', "Hello " . $user_data['first_name'] . ",\n\nThank you for using the Factionizer.  Your username is:\n" . 	$user_data['username'] . "\n\n   ---Factionizer");
 	} else if ($mode == 'password') {
@@ -37,6 +95,7 @@ function recover($mode, $email) {
 }
 
 function update_user($user_id, $update_data) {
+	$user_id = (int)$user_id;
 	$update = array();
 	array_walk($update_data, 'array_sanitize');
 	
@@ -44,7 +103,7 @@ function update_user($user_id, $update_data) {
 		$update[] = '`' . $field . '` = \'' . $data . '\'';
 	}
 	
-	mysql_query("UPDATE `users` SET " . implode(', ', $update) . " WHERE `user_id` = '$user_id'");
+	return (mysql_query("UPDATE `users` SET " . implode(', ', $update) . " WHERE `user_id` = '$user_id'")) ? true : false;
 }
 
 
@@ -89,40 +148,7 @@ function register_user($register_data) {
 	mail($emailto, $subject, $message, "From: ".$from);
 }
 
-function user_count() {
-	return mysql_result(mysql_query("SELECT COUNT(`user_id`) FROM `users` WHERE `active` = 1"), 0);
-	//$data = mysqli_query($connection, $query);
-	//return $data;
-}
 
-function user_data($user_id) {
-	$data = array();
-	$user_id = (int)$user_id;
-	
-	$func_num_args = func_num_args();
-	$func_get_args = func_get_args();
-
-	if ($func_num_args > 1) {
-		unset($func_get_args[0]);
-		
-		$fields = '`' . implode('`, `', $func_get_args) . '`';
-		$data = mysql_fetch_assoc(mysql_query("SELECT $fields FROM `users` WHERE `user_id` = $user_id"));  
-		
-		return $data;
-
-		//How this appears:
-		//Array ( [user_id] => 1 [username] => asirkin [password] => d61f4a65733e7f4f0996adc9ee573ea6 [first_name] => Andrew [last_name] => Sirkin [email] => asirkin@gmail.com )
-		//To call:
-		//echo $user_data['username'];
-		//User function in init to change or add fields
-		
-		
-	}
-}
-
-function logged_in() {
-	return (isset($_SESSION['user_id'])) ? true : false;
-}
 
 function user_exists($username) {
 	$username = sanitize($username);
@@ -135,13 +161,6 @@ function email_exists($email) {
 	$email = sanitize($email);
 	return (mysql_result(mysql_query("SELECT COUNT(`user_id`) FROM `users` WHERE `email` = '$email'"), 0) == 1) ? true : false;
 	//$query = "SELECT COUNT(`user_id`) FROM `users` WHERE `email` = '$email'";
-	//if (mysqli_query($connection, $query) == 1) {return true;} else {return false;}
-}
-
-function user_active($username) {
-	$username = sanitize($username);
-	return (mysql_result(mysql_query("SELECT COUNT(`user_id`) FROM `users` WHERE `username` = '$username' AND `active` = 1"), 0) == 1) ? true : false;
-	//$query = "SELECT COUNT(`user_id`) FROM `users` WHERE `username` = '$username' AND `active` = 1";
 	//if (mysqli_query($connection, $query) == 1) {return true;} else {return false;}
 }
 

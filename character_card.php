@@ -24,7 +24,7 @@
 				echo '<li><a href="index.php">Home</a></li>';
 				echo '<li><a href="new_project.php">New</a></li>';
 				echo '<li><a href="load.php">Open</a></li>';
-				echo '<li><a href="edit_project.php">Change Numbers</a></li>';
+				echo '<li><a href="edit_project.php">Edit Project</a></li>';
 				echo '<li><a href="grid.php">Grid</a></li>';
 				echo '<li class="selected"><a href="character_card.php">Character Cards</a></li>';
 			echo '</ul>';*/

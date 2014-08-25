@@ -3,9 +3,8 @@ function email($to, $subject, $body) {
 	mail($to, $subject, $body, 'From: factionizer@factionizer.com');
 }
 
-
 function protect_page() {
-	if (logged_in() === false) {
+	if (is_logged_in() === false) {
 		echo '<meta HTTP-EQUIV="REFRESH" content="0; url=protected.php">';
 		exit();
 	}
@@ -13,21 +12,23 @@ function protect_page() {
 
 function admin_page() {
 	global $user_data;
-	if (has_access($user_data['user_id'], 1) === false) {
+	if (has_access($user_data['user_id'], USER_TYPE_ADMIN) === false) {
 		echo '<meta HTTP-EQUIV="REFRESH" content="0; url=index.php">';
 		exit();
 	}
 }
 
 function logged_in_redirect() {
-	if (logged_in() === true) {
+	if (is_logged_in() === true) {
 		echo '<meta HTTP-EQUIV="REFRESH" content="0; url=index.php">';
 	}
 }
 
-
-function array_sanitize($item) {
-	$item = htmlentities(strip_tags(mysql_real_escape_string($item)));
+function array_sanitize($items) {
+	foreach ($items as &$item) {
+		$item = htmlentities(strip_tags(mysql_real_escape_string($item)));
+	}
+	return $items;
 }
 
 function sanitize($data)  {
@@ -37,5 +38,3 @@ function sanitize($data)  {
 function output_errors($errors) {
 	return '<ul><li>' . implode('</li><li>', $errors) . '</li></ul>';
 }
-
-?>

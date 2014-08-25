@@ -4,7 +4,7 @@
 	include 'includes/overall/overall_header.php';
 	$from		=	"factionizer@factionizer.com";
 	if (isset($_GET['success']) && empty($_GET['success'])) {
-	if (logged_in() === true) {
+	if (is_logged_in() === true) {
 		$name		= 	$user_data['first_name'];
 		$email		=	$user_data['email'];
 	} else {
@@ -31,7 +31,7 @@ if (isset($_GET['success']) && empty($_GET['success'])) {
 	<p>We always like hearing from our friends.<p>
 	<?php
 } else {
-	if (logged_in() === false) {
+	if (is_logged_in() === false) {
 		?>
 		<h2>Got something to say?  Say it here!  We're always happy to hear<br>your suggestions and support!</h2><br>
 		<form action="contact.php?success" method="POST">

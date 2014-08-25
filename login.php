@@ -10,7 +10,7 @@ if (empty($_POST) === false) {
 		$errors[] = 'You need to enter a user name and password';
 	} else if (user_exists($username) === false) {
 		$errors[] = 'That user name does not exist.  Please click Register below.';
-	} else if (user_active($username) === false) {
+	} else if (is_user_active($username) === false) {
 		$errors[] = 'Please check your email to activate your account';
 	} else {
 		if (strlen($_POST['password']) <= 7) {

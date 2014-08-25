@@ -1,53 +1,61 @@
 jQuery(document).ready(function() {
-	var faction_loop=1, character_loop=1, var_id, faction_num, character_num;
-	while (faction_loop<=12) {
-		//delete faction
-		$("#delete_faction_" + faction_loop).click(function() {
-			var_id = this.id;
-			if ([var_id.length - 2] != 1) {
-				faction_num = var_id[var_id.length -1];
-			} else {
-				faction_num = var_id[var_id.length -2] + var_id[var_id.length -1];
-			}
-			if (confirm('Are you sure you want to delete Faction ' + faction_num + '?')) {
-				window.location.replace("edit_project.php?delete_faction=" + faction_num)
-			} else {
-				return false;
-			}
-		});
-		
-		//delete faction qty
-	
-		while (character_loop<=12) {
-			//delete character
-			$("#delete_faction_" + faction_loop + "_character_" + character_loop).click(function() {
-				var_id = this.id;
-				if (("" + var_id[var_id.length - 2]) == "_") {
-					character_num = "" + var_id[var_id.length -1];
-					if (("" + var_id[var_id.length - 14]) == "_") {
-						faction_num = var_id[var_id.length -13];
-					} else {
-						faction_num = "" + var_id[var_id.length -14] + var_id[var_id.length -13];
-					}
-				} else {
-					character_num = "" + var_id[var_id.length -2] + var_id[var_id.length -1];
-					if (var_id[var_id.length - 15] == "_") {
-						faction_num = var_id[var_id.length -14];
-					} else {
-						faction_num = "" + var_id[var_id.length -15] + var_id[var_id.length -14];
-					}
-				}
-				if (confirm('Are you sure you want to delete Character ' + character_num + ' from Faction ' + faction_num + '?')) {
-					window.location.replace("edit_project.php?delete_faction=" + faction_num + "&delete_character=" + character_num);
-				} else {
-					return false;
-				}
-			});
-			//delete character qty
-			character_loop++;
+	$('.delete_faction').click(function(e) {
+		e.preventDefault();
+		var faction_num = $(this).data('faction-id');
+		var faction_name = $(this).data('faction-name');
+		if (confirm('Are you sure you want to delete Faction: ' + faction_name + '?')) {
+			window.location.replace("edit_project.php?action=delete&type=faction&id=" + faction_num);
 		}
-		character_loop=1;
-		faction_loop++;
-	}
-	faction_loop=0;
+	});
+	$('.restore_faction').click(function(e) {
+		e.preventDefault();
+		var faction_num = $(this).data('faction-id');
+		var faction_name = $(this).data('faction-name');
+		if (confirm('Are you sure you want to restore Faction: ' + faction_name + '?')) {
+			window.location.replace("edit_project.php?action=restore&type=faction&id=" + faction_num);
+		}
+	});
+	$('.delete_character').click(function(e) {
+		e.preventDefault();
+		var character_num = $(this).data('character-id');
+		var character_name = $(this).data('character-name');
+		if (confirm('Are you sure you want to delete Character: ' + character_name + '?')) {
+			window.location.replace("edit_project.php?action=delete&type=character&id=" + character_num);
+		}
+	});
+	$('.restore_character').click(function(e) {
+		e.preventDefault();
+		var character_num = $(this).data('character-id');
+		var character_name = $(this).data('character-name');
+		if (confirm('Are you sure you want to restore Character: ' + character_name + '?')) {
+			window.location.replace("edit_project.php?action=restore&type=character&id=" + character_num);
+		}
+	});
+	$('#random-names').click(function(e) {
+		e.preventDefault();
+		if (confirm('Are you sure you want to randomly fill all blank character names?')) {
+			var emptyCharacterNames = $('.character-names').filter(function() { return this.value == ""; });
+			var nameCount = emptyCharacterNames.length;
+			var randomNames;
+			$.get( "edit_project.php?action=get-names&name-count=" + nameCount, function(data) {
+				emptyCharacterNames.each(function(index) {
+					parsedData = JSON.parse(data);
+			      	this.value = parsedData[index];
+			    });
+			}).fail(function() {
+			    console.log('Error getting random names');
+			});
+		}
+	});
+	$('#add-faction').click(function(e) {
+		e.preventDefault();
+		var faction_count = parseInt($('#faction-count').html());
+		var faction_limit = parseInt($('#faction-limit').html());
+		var faction_id = faction_count + 1;
+		if (faction_id > faction_limit) {
+			alert('You already at the faction limit of ' + faction_limit);
+			return false;
+		}
+		window.location.replace("edit_project.php?action=add-faction");
+	});
 });

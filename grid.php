@@ -4,9 +4,21 @@ include 'core/init.php';
 
 protect_page();
 $user_id = $_SESSION['user_id'];
-$project_id = mysql_result(mysql_query("SELECT `active_project` FROM `users` WHERE `user_id`='$user_id'"), 0);
-$bearer = 1;
-$receiver = 1;
+$project_id = get_active_project($user_id);
+$factions = get_project_factions($project_id);
+foreach ($factions as $faction) {
+	if ($faction['deleted']) {
+		continue;
+	}
+	if ( ! isset($bearer)) {
+		$bearer = $faction['faction_num'];
+		$receiver = $faction['faction_num'];
+	} else {
+		$receiver = $faction['faction_num'];
+		break;
+	}
+}
+
 if ( ! empty($_GET['bearer']) && ! empty($_GET['receiver'])) {
 	$bearer = $_GET['bearer'];
 	$receiver = $_GET['receiver'];
@@ -149,7 +161,7 @@ for ($number = 1; $number <= 12; $number++) {
 				<li><a href="index.php">Home</a></li>
 				<li><a href="new_project.php">New</a></li>
 				<li><a href="load.php">Open</a></li>
-				<li><a href="edit_project.php">Change Numbers</a></li>
+				<li><a href="edit_project.php">Edit Project</a></li>
 				<li class="selected"><a href="grid.php">Grid</a></li>
 				<li><a href="character_card.php">Character Cards</a></li>
 				<li><a href="print.php">Print CC's</a></li>
@@ -232,11 +244,11 @@ for ($number = 1; $number <= 12; $number++) {
 					<div class="row<?php echo $number;?>"></div>
 				<?php } ?>
 				<?php else: ?>
-				No factions configured or all factions deleted.
+				<p>No factions configured or all factions deleted.</p>
+				<a href="edit_project.php">Edit Project</a>
 				<?php endif; ?>
+				<?php include 'includes/footer.php'; ?>
 			</div>
 		</div>
 	</body>
 </html>
-<?php 
-include 'includes/overall/overall_footer.php';

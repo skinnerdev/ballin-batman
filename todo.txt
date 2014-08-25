@@ -1,0 +1,8 @@
+TODO:
+
+Get input.php working accurately
+character_card.php working accurately
+print.php working correctly
+Add character and faction limits to system db
+If db changes to allow more characters, add ability to add more characters to a faction
+Remove unused functions and files

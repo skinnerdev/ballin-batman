@@ -23,7 +23,7 @@ $projects = getProjectList();
 					<li><a href="index.php">Home</a></li>
 					<li><a href="new_project.php">New</a></li>
 					<li class="selected"><a href="load.php">Open</a></li>
-					<li><a href="edit_project.php">Change Numbers</a></li>
+					<li><a href="edit_project.php">Edit Project</a></li>
 					<li><a href="grid.php">Grid</a></li>
 					<li><a href="character_card.php">Character Cards</a></li>
 				</ul>
@@ -40,9 +40,8 @@ $projects = getProjectList();
 					</tr>
 				<?php endforeach; ?>
 				</table>
+			<?php include 'includes/footer.php'; ?>
 			</div>
 		</div>
 	</body>
 </html>
-<?php 
-include 'includes/overall/overall_footer.php'; ?>

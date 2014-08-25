@@ -3,12 +3,9 @@ include 'core/init.php';
 protect_page();
 admin_page();
 include 'includes/overall/overall_header.php';
-
 ?>
 
-<h1>Email All Users</h1><br>
-<p></p>
-
+<h1><a href="admin.php">Administration</a> - Email All Users</h1>
 <?php
 if (isset($_GET['success']) === true && empty($_GET['success']) === true) {
 	?>

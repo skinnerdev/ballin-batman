@@ -1,19 +1,140 @@
 <?php
 include 'core/init.php';
 include 'includes/check_connect.php';
-if (isset($_SESSION['user_id'])) {
-	$project_id = mysql_result(mysql_query("SELECT `active_project` FROM `users` WHERE `user_id`='$user_id'"), 0); //sets the project ID
-}
+protect_page();
+$project_id = $activeProject['project_id'];
 if ($project_id == 0) {  //redirects if there's no active project for the user (if they've not created one)
-	echo '<meta HTTP-EQUIV="REFRESH" content="0; url=new_project.php">';
+	header("Location: new_project.php");
+	exit;
 }
 
-if (isset($_REQUEST['restore_character'])) {
-	$character_id = (int)$_REQUEST['restore_character'];
+if (isset($_POST['restore_character'])) {
+	$character_id = (int)$_POST['restore_character'];
 	mysql_query("UPDATE `characters` SET `deleted` = 0 WHERE `character_id` = " . $character_id);
 }
-?>
+$factions = get_project_factions($project_id);
+$character_data = get_project_characters($project_id);
+$deleted_characters = array();
+$deleted_factions = array();
+foreach ($character_data as $faction_num => $faction) {
+	if ($factions[$faction_num]['deleted']) {
+		$deleted_factions[$faction_num] = $faction;
+		unset($character_data[$faction_num]);
+		continue;
+	}
+	foreach ($faction as $key => $character) {
+		if ($character['deleted']) {
+			$deleted_characters[$faction_num][$key] = $character;
+			unset($character_data[$faction_num][$key]);
+		}
+	}
+}
 
+if ( ! empty($_POST)) {
+	$required_fields = array('project_name', 'faction_1', 'faction_2');  // can add other fields here later
+	foreach($_POST as $key => $value) { //checks for required fields
+		if (empty($value) && in_array($key, $required_fields)){
+			$errors[] = 'Fields marked with an asterisk are required.';
+			break;
+		}
+	}
+	if (empty($errors)) {
+		// Do post save
+	}
+}
+
+$new_project = false;
+if (isset($_SESSION['new-project'])) {
+	$new_project = true;
+	unset($_SESSION['new-project']);
+}
+
+if (isset($_GET['action'])) {
+	$type = '';
+	$id = null;
+	$action = $_GET['action'];
+	if (isset($_GET['type'])) {
+		$type = $_GET['type'];
+	}
+	if (isset($_GET['id'])) {
+		$id = (int)$_GET['id'];
+	}
+	$result = null;
+	switch ($action) {
+		case 'restore':
+		case 'delete':
+			if ($type == 'character' || $type == 'faction') {
+				$result = call_user_func($action . "_" . $type . "_by_id", $id);
+				if ($result) {
+					$_SESSION['edit-project-save-message'] = ucfirst("$type " . $action . "d successfully!");
+				} else {
+					$result = true;
+					$_SESSION['edit-project-save-message'] = "There was a problem with the " . $action . ". Please try again.";
+				}
+
+			}
+			break;
+		case 'get-names':
+			if (isset($_GET['name-count'])) {
+				$name_count = $_GET['name-count'];
+				$names = get_random_names($name_count);
+				echo json_encode($names);
+				exit;
+			}
+			break;
+		case 'add-faction':
+			$result = project_add_faction($project_id);
+			if ($result) {
+				$_SESSION['edit-project-save-message'] = "New faction added. Character names auto-filled.";
+			} else {
+				$result = true;
+				$_SESSION['edit-project-save-message'] = "There was a problem adding a new faction.";
+			}
+			break;
+	}
+	if ($result) {
+		header("Location: edit_project.php");
+		exit;
+	}
+}
+
+$saveMessage = null;
+if (isset($_SESSION['edit-project-save-message'])) {
+	$saveMessage = $_SESSION['edit-project-save-message'];
+	unset($_SESSION['edit-project-save-message']);
+}
+
+
+
+
+if (isset($_GET['submit']) && empty($_GET['submit'])) {
+	$project_name = $_POST['project_name'];				
+	$faction_data = get_faction_data($project_id);
+	$character_data = get_character_data($project_id);
+	$faction_loop = 1;
+	$character_loop=1;
+	while ($faction_loop <=12) {
+		if ($faction_data['faction_num_' . $faction_loop . '_deleted'] == 0) {
+			//get faction names
+			$faction_names['faction_name_' . $faction_loop] = $_POST['faction_name_' . $faction_loop];
+			while ($character_loop <= 12) {
+				if ($character_data['faction_' . $faction_loop . '_character_' . $character_loop . '_deleted'] == 0) {
+					//get character names
+					$character_names['faction_' . $faction_loop . '_character_' . $character_loop . '_name'] = $_POST['faction_' . $faction_loop . '_character_' . $character_loop . '_name'];
+					//get player names
+					$player_names['faction_' . $faction_loop . '_character_' . $character_loop . '_player'] = $_POST['faction_' . $faction_loop . '_character_' . $character_loop . '_player'];
+				}
+				$character_loop++;
+			}
+		}
+		$faction_loop++;
+		$character_loop = 1;
+	}
+	update_names($project_id, $_POST['project_name'], $faction_names, $character_names, $player_names);			
+	echo '<meta HTTP-EQUIV="REFRESH" content="0; url=edit_project.php?success">';
+	exit();
+}
+?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -28,156 +149,111 @@ if (isset($_REQUEST['restore_character'])) {
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<!--script src="includes/jquery.jeditable.mini.js"></script-->
 		<script type="text/javascript" src="/includes/javascript_edit.js"></script>
-	</head>
-<body>
-	<?php
-	if (empty($_POST) === false) {
-		$required_fields = array('project_name', 'faction_1', 'faction_2');  // can add other fields here later
-		foreach($_POST as $key=>$value) { //checks for required fields
-			if (empty($value) && in_array($key, $required_fields) === true){
-				$errors[] = 'Fields marked with an asterisk are required.';
-				break 1;
-			}
+		<style>
+		i.fa {
+			color: #548B54;
 		}
-	}
-	?>
+		a.delete_faction i, a.delete_character i {
+			float: left;
+			margin-right: 10px;
+			color: #ff0000;
+		}
+		a.restore_character, #random-names, #add-faction {
+			float: left;
+			margin-right: 10px;
+		}
+		.edit-project>ul>li {
+			padding-left: 25px;
+		}
+		</style>
+	</head>
+	<body>
 	<div id="container">
 		<h1>The Factionizer - Project: <?php echo $activeProject['project_name'];?></h1>
 		<ul class="menu">
 			<li><a href="index.php">Home</a></li>
 			<li><a href="new_project.php">New</a></li>
 			<li><a href="load.php">Open</a></li>
-			<li class="selected"><a href="edit_project.php">Change Numbers</a></li>
+			<li class="selected"><a href="edit_project.php">Edit Project</a></li>
 			<li><a href="grid.php">Grid</a></li>
 			<li><a href="character_card.php">Character Cards</a></li>
 		</ul>
 		<div id="grid_container">	
-			<?php
-
-			if (isset($_GET['delete_faction']) && empty($_GET['delete_faction'])==false && isset($_GET['delete_character'])==false) {
-				//$project_name = get_project_data($project_id); 
-				//echo $_GET['delete_faction']; exit();
-				$faction_num = $_GET['delete_faction'];
-				$sql = "SELECT `faction_name` FROM `factions` WHERE `project_id` = '$project_id' AND `faction_num` = '$faction_num'";
-				$faction_name = mysql_result(mysql_query($sql),0);
-				delete_faction($faction_num, $faction_name);
-				echo '<meta HTTP-EQUIV="REFRESH" content="0; url=edit_project.php">';
-			} else if (isset($_GET['delete_faction']) && empty($_GET['delete_faction']) ==false && isset($_GET['delete_character']) && empty($_GET['delete_character'])==false){
-				delete_character($_GET['delete_faction'],$_GET['delete_character']);
-				echo '<meta HTTP-EQUIV="REFRESH" content="0; url=edit_project.php">';
-			} else if (isset($_GET['success']) && empty($_GET['success'])) {
-				echo "<h3>Your data has been updated!</h3>";
-			} else if (isset($_GET['submit']) && empty($_GET['submit'])) {
-				$project_name = $_POST['project_name'];				
-				$faction_data = get_faction_data($project_id);
-				$character_data = get_character_data($project_id);
-				$faction_loop = 1;
-				$character_loop=1;
-				while ($faction_loop <=12) {
-					if ($faction_data['faction_num_' . $faction_loop . '_deleted'] == 0) {
-						//get faction names
-						$faction_names['faction_name_' . $faction_loop] = $_POST['faction_name_' . $faction_loop];
-						while ($character_loop <= 12) {
-							if ($character_data['faction_' . $faction_loop . '_character_' . $character_loop . '_deleted'] == 0) {
-								//get character names
-								$character_names['faction_' . $faction_loop . '_character_' . $character_loop . '_name'] = $_POST['faction_' . $faction_loop . '_character_' . $character_loop . '_name'];
-								//get player names
-								$player_names['faction_' . $faction_loop . '_character_' . $character_loop . '_player'] = $_POST['faction_' . $faction_loop . '_character_' . $character_loop . '_player'];
-							}
-							$character_loop++;
-						}
-					}
-					$faction_loop++;
-					$character_loop = 1;
-				}
-				update_names($project_id, $_POST['project_name'], $faction_names, $character_names, $player_names);			
-				echo '<meta HTTP-EQUIV="REFRESH" content="0; url=edit_project.php?success">';
-				exit();
-			} else if (isset($_GET['rand_names']) && empty($_GET['rand_names'])) {
-				update_rand_names($project_id);
-			} else {
-				if (empty($errors) === false) {
+			<form action="edit_project.php" method="post" role="form">
+				<div class="edit-project">
+				<?php if ( ! empty($errors)) {
 					echo output_errors($errors);
-				}
-			}
-			if (isset($_GET['new']) && empty($_GET['new'])) {
-				$new = true;
-				echo '<h3><p>Your new project has been created!</p></h3>';
-			} else $new = false;
-			echo '<h4><p>On this page, you can edit the names and numbers within your project, including the name of your project, the names and numbers of your factions, and the names and numbers of active characters in each faction.</p></h4>';
-			if ($new==true) {
-				echo '<h4><p>We\'ve created some generic names for you to use for now.</p></h4>';
-			}
-			
-			$project_data = get_project_data($project_id); //these four lines get all the data
-			$project_name = $project_data['project_name_1'];
-			$faction_data = get_faction_data($project_id);
-			$character_data = get_character_data($project_id);
-			//formats are all in the format: array_name['faction_name_number'] or array_name['faction_number_character_number_function'] (such as name or ID)
-			//additional information for $faction_data['faction_qty']
-			
-			echo '<form action="edit_project.php?submit" method="post" role="form">';  //beginning of the form
-						
-			echo "<h3><p>Project Name: 
-			<input type=\"text\" name=\"project_name\" value=\"" . $project_name . "\"></input>";
-			echo " &nbsp &nbsp &nbsp Number of Factions: 
-			<input type=\"text\" name=\"faction_qty\" value=\"" . $faction_data['faction_qty'] . "\"></input></p></h3>";
-			$faction_loop = 1;
-			$character_loop=1;
-			
-			while ($faction_loop <=12) { //loops 12 times for 12 factions
-				$deleted_faction_qty=0;
-				if ($faction_data['faction_num_' . $faction_loop . '_deleted'] == 0) {
-					GLOBAL $the_faction;
-					$the_faction = $faction_data['faction_name_' . $faction_loop];
-					echo "<img src=\"images\\red_x.gif\" id=\"delete_faction_" . $faction_loop . "\" class=\"delete_faction\" alt=\"Delete\">
-
-					&nbsp <b>Faction:</b>
-					<input type=\"text\" name=\"faction_name_" . $faction_loop . "\" class=\"edit\" value=\"" . $faction_data['faction_name_' . $faction_loop] . "\"></input>"; 
-					//input field for changing faction name, named faction_name_1
-					
-					//echo "<img src=\"images\\edit.gif\"  alt=\"Edit\">";
-					
-					echo " &nbsp &nbsp &nbsp Number of Characters: 
-					" . $character_data['faction_' . $faction_loop . '_char_qty'];
-					
-					echo "<!--img src=\"images\\edit.gif\"  class=\"edit_faction_qty\" class=\"faction " . $faction_loop . "\" alt=\"Edit\"-->
-					
-					</p></h3>"; //input field for changing number of characters in that faction, named faction_1_char_qty
-					
-					$deleted_character_qty = 0;
-					while ($character_loop <= 12) {  //loops 12 times for 12 characters max per faction
-						if ($character_data['faction_' . $faction_loop . '_character_' . $character_loop . '_deleted'] == 0) {  //if not marked as deleted, print the character
-							echo "<p> &nbsp &nbsp 
-							<img src=\"images\\red_x.gif\"  id=\"delete_faction_" . $faction_loop . "_character_" . $character_loop . "\" class=\"delete_character\" alt=\"Delete\">
-							&nbsp &nbsp Character: 
-							<input type=\"text\" name=\"faction_" . $faction_loop . "_character_" . $character_loop . "_name\" value=\"" . $character_data['faction_' . $faction_loop . '_character_' . $character_loop . '_name'] . "\"></input>
-							&nbsp &nbsp  &nbsp Player: 
-							<input type=\"text\" name=\"faction_" . $faction_loop . "_character_" . $character_loop . "_player\" value=\"" . $character_data['faction_' . $faction_loop . '_character_' . $character_loop . '_player'] . "\"></input></p>";
-						} else {
-							$deleted_character_qty++;
-							?>
-							<a onclick="return confirm('Are you sure you want to restore deleted character <?php echo $character_data['faction_' . $faction_loop . '_character_' . $character_loop . '_name'];?>?')" href="edit_project.php?restore_character=<?php echo $character_data['faction_' . $faction_loop . '_character_' . $character_loop . '_id'];?>">Restore Deleted Character: <?php echo $character_data['faction_' . $faction_loop . '_character_' . $character_loop . '_name'];?></a>
-							<?php
-						}
-						$character_loop++;
-					}
-					echo "<br /><br />";
-				} else {$deleted_faction_qty=1;}
-				if ($deleted_faction_qty==1){
-					echo 'Add deleted faction';
-				}
-				$character_loop=1;
-				$faction_loop++;
-				
-			}
-			
-			echo '<input type="submit" value="Save Project">';
-			echo '</form>';
-			
-			echo '<a href="edit_project.php?rand_names">Create Random Names for Any Blank Names</a>';
-		echo '</div>';
-	echo '</div>';
-echo '</body>';
-echo '</html>';
-include 'includes/overall/overall_footer.php';
+				}?>
+				<?php if ( ! empty($saveMessage)) {
+					echo '<h3 style="color: #548B54">' . $saveMessage . '</h3>';
+				}?>
+				<?php if ($new_project) : ?>
+				<h3><p>Your new project has been created!</p></h3>
+				<?php endif; ?>
+				<h4><p>On this page, you can edit the names and numbers within your project, including the name of your project, the names and numbers of your factions, and the names and numbers of active characters in each faction.</p></h4>
+				<?php if ($new_project) : ?>
+				<h4><p>We've created some generic names for you to use for now.</p></h4>
+				<?php endif; ?>
+				<h3>
+					<label for="project_name">Project Name:</label>
+					<input type="text" name="project_name" value="<?php echo $activeProject['project_name'];?>"></input>
+					&nbsp;&nbsp;&nbsp;Number of Factions: <span id="faction-count"><?php echo $activeProject['faction_qty'];?></span> / <span id="faction-limit"><?php echo FACTION_LIMIT; ?></span>
+				</h3>
+				<p>
+					<a id="random-names"><i class="fa fa-random fa-2x"></i></a>Create random names for any blank Character names.
+				</p>
+				<?php if ($activeProject['faction_qty'] < FACTION_LIMIT) : ?>
+				<p id="add-faction-container">
+					<a id="add-faction"><i class="fa fa-plus fa-2x"></i></a>Add another faction.
+				</p>
+				<?php endif; ?>
+				<br >
+				<?php foreach ($character_data as $faction_num => $faction_characters) : ?>
+				<a title="Delete Faction" class="delete_faction" id="delete_faction_<?php echo $faction_num; ?>" data-faction-id="<?php echo $factions[$faction_num]['faction_id'];?>" data-faction-name="<?php echo $factions[$faction_num]['faction_name'];?>"><i class="fa fa-times fa-2x"></i></a>
+				&nbsp;
+				<strong>Faction:</strong>
+				<input type="text" name="faction_name_<?php echo $faction_num; ?>" class="edit" value="<?php echo $factions[$faction_num]['faction_name'];?>"></input>
+				&nbsp;&nbsp;&nbsp;Number of Characters: <?php echo count($faction_characters); ?> / <?php echo CHARACTER_LIMIT; ?>
+				<br >
+				<br >
+				<ul>
+				<?php foreach ($faction_characters as $character_num => $character) : ?>
+					<li>
+						<a title="Delete Character" class="delete_character" id="delete_character_<?php echo $character_num; ?>" data-character-id="<?php echo $character['character_id'];?>" data-character-name="<?php echo $character['character_name'];?>"><i class="fa fa-times fa-2x"></i></a>
+						&nbsp;Character:
+						<input class="character-names" type="text" name="faction_<?php echo $faction_num;?>_character_<?php echo $character_num;?>_name" value="<?php echo $character['character_name'];?>"></input>
+						&nbsp;&nbsp;Player:
+						<input type="text" name="faction_<?php echo $faction_num;?>_character_<?php echo $character_num;?>_player" value="<?php echo $character['player_name'];?>"></input>
+					</li>
+				<?php endforeach; ?>
+				</ul>
+				<?php if ( ! empty($deleted_characters[$faction_num])) : ?>
+				<ul>
+					<li><p>Deleted Characters in this faction</p></li>
+					<?php foreach ($deleted_characters[$faction_num] as $character_num => $character) : ?>
+					<li>
+						<a title="Restore Character" class="restore_character" id="restore_character_<?php echo $character_num;?>" data-character-id="<?php echo $character['character_id'];?>" data-character-name="<?php echo $character['character_name'];?>"><i class="fa fa-undo fa-lg"></i></a>
+						&nbsp;Character: <?php echo $character['character_name'];?>
+					</li>
+					<?php endforeach ; ?>
+				</ul>
+				<?php endif; ?>
+				<?php endforeach; ?>
+				<?php if ( ! empty($deleted_factions)) : ?>
+				<h4>Deleted Factions</h4>
+				<?php foreach ($deleted_factions as $faction_num => $faction_characters) : ?>
+					<p>
+						<a title="Restore Faction" class="restore_faction" id="restore_faction_<?php echo $faction_num;?>" data-faction-id="<?php echo $factions[$faction_num]['faction_id'];?>" data-faction-name="<?php echo $factions[$faction_num]['faction_name'];?>"><i class="fa fa-undo fa-lg"></i></a>
+						&nbsp;Faction: <?php echo $factions[$faction_num]['faction_name'];?>
+					</p>
+				<?php endforeach; ?>
+				<?php endif; ?>
+				</div>
+				<br >
+				<input type="submit" value="Save Project">
+			</form>
+		<?php include 'includes/footer.php'; ?>
+		</div>
+	</div>
+	</body>
+</html>
