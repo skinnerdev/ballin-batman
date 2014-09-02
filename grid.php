@@ -1,10 +1,9 @@
 <?php 
 error_reporting(0);
 include 'core/init.php';
-
 protect_page();
 $user_id = $_SESSION['user_id'];
-$project_id = get_active_project($user_id);
+$project_id = $activeProject['project_id'];
 $factions = get_project_factions($project_id);
 foreach ($factions as $faction) {
 	if ($faction['deleted']) {
@@ -136,15 +135,26 @@ for ($number = 1; $number <= 12; $number++) {
 		}
 	}
 }
+$columnCount = 0;
+foreach ($receiver_data as $data) {
+	if ( ! $data['deleted']) {
+		$columnCount++;
+	}
+}
+$rowCount = 0;
+foreach ($display_data as $data) {
+	if ( ! $data['character']['deleted']) {
+		$rowCount++;
+	}
+}
 ?>
 <!DOCTYPE html>
 <html>
 	<head>
-		<!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"> -->
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/primary.css">
 		<script src="includes/jquery-1.9.0.min.js"></script>
-		<script type="text/javascript" src="/includes/javascript_grid.js"></script>
 		<script type="text/javascript" src="/includes/colorbox.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<script>
@@ -153,6 +163,89 @@ for ($number = 1; $number <= 12; $number++) {
 				$(".iframe").colorbox({iframe:true, width:"80%", height:"80%"});
 			});
 		</script>
+		<style>
+
+.grid-columns {
+	position:absolute;
+	left:0px;
+	top:85px;
+	height:<?php echo ($rowCount * 48) + 96;?>px;
+	width:82px;
+	background:#104E8B;
+	z-index:9998;
+	opacity:.7;
+	 visibility:hidden;
+}
+#grid_container>.columnfaction {left:132px;}
+<?php
+$left = 132; 
+for ($count = 1; $count <= $columnCount; $count++) {
+	$left += 82;
+	echo "#grid_container>.column" . $alpha[$count - 1] . " {left: {$left}px;}\n";
+} ?>
+.hidden_visible{
+	visibility:hidden;
+}
+
+<?php
+$rowClasses = '';
+for ($count = 1; $count <= $rowCount; $count++) {
+	$rowClasses .= ".row$count, ";
+} ?>
+<?php echo substr($rowClasses, 0, -2);?> {
+	position:absolute;
+	height:48px;
+	width:<?php echo ($columnCount * 82) + 164;?>px;
+	background:red;
+	z-index:9998;
+	opacity:.7;
+	visibility:hidden;
+}
+<?php
+$top = 133; 
+for ($count = 1; $count <= $rowCount; $count++) {
+	$top += 48;
+	echo "#grid_container>.row" . $count . " {top: {$top}px;}\n";
+} ?>
+
+/* Hover commands */
+
+.block:hover { /* cell highlight */
+	background:purple;
+}
+
+.faction{
+	background:black;
+	color:#00ff00;
+}
+
+<?php
+$visibleClasses = "#grid_container>.columna:hover,\n";
+$visibleClasses .= "#faction2faction:hover~.columnfaction,\n";
+for ($count = 1; $count <= $columnCount; $count++) {
+	$visibleClasses .= "#grid_container>.column" . $alpha[$count - 1] . ":hover, \n";
+	$visibleClasses .= "#columnheader" . $alpha[$count - 1] . ":hover ~.column" . $alpha[$count - 1] . ",\n";
+}
+for ($count = 1; $count <= $rowCount; $count++) {
+	$visibleClasses .= "#character_to_faction_" . $count . ":hover~.columnfaction,\n";
+	$visibleClasses .= "#grid_container>.row" . $count . ":hover,\n";
+	$visibleClasses .= "#character_to_faction_" . $count . ":hover~.row" . $count . ",\n";
+	$visibleClasses .= "#rowheader" . $count . ":hover~.row" . $count . ",\n";
+}
+for ($columnNum = 0; $columnNum < $columnCount; $columnNum ++) {
+	$letter = $alpha[$columnNum];
+	for ($rownum = 1; $rownum <= $rowCount; $rownum++) {
+		$visibleClasses .= "#block" . $rownum . $letter . ":hover~.row" . $rownum . ",\n";
+		$visibleClasses .= "#block" . $rownum . $letter . ":hover~.column" . $letter . ",\n";
+	}
+	$visibleClasses .= "#block" . $rowCount . $letter . ":hover~.column,\n";
+}
+
+?>
+<?php echo substr($visibleClasses, 0, -2);?> {
+    visibility:  visible;    
+}
+		</style>
 	</head>
 	<body>
 		<div id="container">
@@ -164,7 +257,7 @@ for ($number = 1; $number <= 12; $number++) {
 				<li><a href="edit_project.php">Edit Project</a></li>
 				<li class="selected"><a href="grid.php">Grid</a></li>
 				<li><a href="character_card.php">Character Cards</a></li>
-				<li><a href="print.php">Print CC's</a></li>
+				<li><a href="print.php" target="_blank">Print CC's</a></li>
 			</ul>
 			<div id="grid_container">
 				<?php if ( ! empty($factionListA)) : ?>
@@ -182,13 +275,13 @@ for ($number = 1; $number <= 12; $number++) {
 				}
 
 				?>
-				</select> &nbsp; &nbsp;
+				</select>&nbsp;&nbsp;
 				<input class="submit_button" type="submit" value="Update">
 				</form>
-				<br /><br /><br /><br /><br />
+				<br >
 				<div class="block hidden_visible"></div>
 				<div id="columnheader_receiver" class="block faction">
-					<a class="iframe" href="character_card.php?faction_overview=<?php echo $receiver_id;?>">Faction: <?php echo $receiver_faction;?></a>
+					<!--<a class="iframe" href="character_card.php?faction_overview=<?php echo $receiver_id;?>">-->Faction: <?php echo $receiver_faction;?><!--</a>-->
 				</div>
 				<?php
 				$count = 0;
@@ -199,11 +292,11 @@ for ($number = 1; $number <= 12; $number++) {
 					$letter = $alpha[$count];
 					$count++;
 				?>
-					<div class="block <?php echo ($target['deleted']) ? 'hidden' : '';?>" id="columnheader<?php echo $letter;?>"><a class="iframe" href="character_card.php?character=<?php echo $target['character_id'];?>"><?php echo $target['character_name'];?></a></div>
+					<div class="block <?php echo ($target['deleted']) ? 'hidden' : '';?>" id="columnheader<?php echo $letter;?>"><a href="character_card.php?character=<?php echo $target['character_id'];?>"><?php echo $target['character_name'];?></a></div>
 				<?php endforeach; ?>
 				<span class="clear"></span>
-				<div id="rowheader_receiver" class="block faction"><a class="iframe" href="character_card.php?faction_overview=<?php echo $bearer_id;?>">Faction: <?php echo $bearer_faction;?></a></div>
-				<div id="faction2faction" class="block"><a class="iframe" href="input.php?f2f&bearer=<?php echo $bearer_id;?>&receiver=<?php echo $receiver_id;?>"><?php echo $f2f_opinion_word;?></a></div>
+				<div id="rowheader_receiver" class="block faction"><!--<a class="iframe" href="character_card.php?faction_overview=<?php echo $bearer_id;?>">-->Faction: <?php echo $bearer_faction;?><!--</a>--></div>
+				<div id="faction2faction" class="block"><a class="iframe" href="input.php?type=f2f&bearer=<?php echo $bearer_id;?>&receiver=<?php echo $receiver_id;?>"><?php echo $f2f_opinion_word;?></a></div>
 				<span class="clear"></span>
 				<?php
 				$row = 1;
@@ -217,11 +310,10 @@ for ($number = 1; $number <= 12; $number++) {
 						<a class="iframe" href="character_card.php?character=<?php echo $source['character']['character_id'];?>"><?php echo $source['character']['character_name'];?></a>
 					</div>
 					<div id="character_to_faction_<?php echo $row;?>" class="block">
-						<a class="iframe" href="input.php?c2f&bearer=<?php echo $source['character']['character_id'];?>&receiver=<?php echo $receiver_id;?>"><?php echo $source['opposite_faction_opinion'];?></a>
+						<a class="iframe" href="input.php?type=c2f&bearer=<?php echo $source['character']['character_id'];?>&receiver=<?php echo $receiver_id;?>"><?php echo $source['opposite_faction_opinion'];?></a>
 					</div>
 					<?php foreach ($source['targets'] as $target_id => $target) :
 						if ($target['deleted']) {
-							//$class = 'hidden';
 							continue;
 						}
 						$letter = $alpha[$count];
@@ -229,7 +321,11 @@ for ($number = 1; $number <= 12; $number++) {
 						$class = '';
 						?>
 						<div id="block<?php echo $row . $letter;?>" class="block <?php echo $class;?>">
-							<a class="iframe" href="input.php?c2c&bearer=<?php echo $source['character']['character_id'];?>&receiver=<?php echo $target_id;?>"><?php echo $target['opinion'];?></a>
+							<?php if ($source['character']['character_id'] == $target_id) : ?>
+							SELF
+							<?php else : ?>
+							<a class="iframe" href="input.php?type=c2c&bearer=<?php echo $source['character']['character_id'];?>&receiver=<?php echo $target_id;?>"><?php echo $target['opinion'];?></a>
+							<?php endif; ?>
 						</div>
 					<?php endforeach;
 					$row++;
@@ -237,13 +333,17 @@ for ($number = 1; $number <= 12; $number++) {
 					<span class="clear"></span>
 				<?php endforeach; ?>
 				<?php /*  ADD BUTTONS (cut into email) */ ?>
-				<div class="columnfaction"></div>
-				<?php for ($number = 0; $number <= 12; $number++) {
-					$letter = $alpha[$number]; ?>
-					<div class="column<?php echo $letter;?>"></div>
-					<div class="row<?php echo $number;?>"></div>
+				<div class="columnfaction grid-columns"></div>
+				<?php for ($columnNum = 0; $columnNum < $columnCount; $columnNum++) {
+					$letter = $alpha[$columnNum]; ?>
+					<div class="column<?php echo $letter;?> grid-columns"></div>
 				<?php } ?>
+				<?php for ($rowNum = 0; $rowNum < $rowCount; $rowNum++) { ?>
+					<div class="row<?php echo $rowNum + 1;?>"></div>
+				<?php } ?>
+
 				<?php else: ?>
+
 				<p>No factions configured or all factions deleted.</p>
 				<a href="edit_project.php">Edit Project</a>
 				<?php endif; ?>

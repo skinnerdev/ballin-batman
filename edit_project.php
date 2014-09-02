@@ -17,7 +17,7 @@ $character_data = get_project_characters($project_id);
 $deleted_characters = array();
 $deleted_factions = array();
 foreach ($character_data as $faction_num => $faction) {
-	if ($factions[$faction_num]['deleted']) {
+	if (isset($factions[$faction_num]) && $factions[$faction_num]['deleted']) {
 		$deleted_factions[$faction_num] = $faction;
 		unset($character_data[$faction_num]);
 		continue;
@@ -91,6 +91,40 @@ if (isset($_GET['action'])) {
 				$_SESSION['edit-project-save-message'] = "There was a problem adding a new faction.";
 			}
 			break;
+		case 'save-form':
+			$result = true;
+			$saveData = array();
+			if (trim($_POST['project_name']) != $activeProject['project_name']) {
+				$saveData['project_name'][$activeProject['project_id']] = trim($_POST['project_name']);
+			}
+			foreach ($_POST['names'] as $faction_num => $names) {
+				if ($factions[$faction_num]['faction_name'] != trim($names['faction_name'])) {
+					$saveData['factions'][$factions[$faction_num]['faction_id']] = trim($names['faction_name']);
+				}
+				foreach ($names as $character_number => $character) {
+					if ($character_number == 'faction_name') {
+						continue;
+					}
+					$charName = trim($character['character_name']);
+					if ( ! empty($charName) && $charName != $character_data[$faction_num][$character_number]['character_name']) {
+						$saveData['characters'][$character_data[$faction_num][$character_number]['character_id']]['character_name'] = $charName;
+					}
+					$playerName = trim($character['player_name']);
+					if ($playerName != $character_data[$faction_num][$character_number]['character_name']) {
+						$saveData['characters'][$character_data[$faction_num][$character_number]['character_id']]['player_name'] = $playerName;
+					}
+					$characterBio = trim($character['character_bio']);
+					if ($characterBio != $character_data[$faction_num][$character_number]['character_bio']) {
+						$saveData['characters'][$character_data[$faction_num][$character_number]['character_id']]['character_bio'] = $characterBio;
+					}
+				}
+			}
+			if ( ! empty($saveData)) {
+				if (save_project_data($project_id, $saveData)) {
+					$_SESSION['edit-project-save-message'] = "Project and names saved!";
+				}
+			}
+			break;
 	}
 	if ($result) {
 		header("Location: edit_project.php");
@@ -102,37 +136,6 @@ $saveMessage = null;
 if (isset($_SESSION['edit-project-save-message'])) {
 	$saveMessage = $_SESSION['edit-project-save-message'];
 	unset($_SESSION['edit-project-save-message']);
-}
-
-
-
-
-if (isset($_GET['submit']) && empty($_GET['submit'])) {
-	$project_name = $_POST['project_name'];				
-	$faction_data = get_faction_data($project_id);
-	$character_data = get_character_data($project_id);
-	$faction_loop = 1;
-	$character_loop=1;
-	while ($faction_loop <=12) {
-		if ($faction_data['faction_num_' . $faction_loop . '_deleted'] == 0) {
-			//get faction names
-			$faction_names['faction_name_' . $faction_loop] = $_POST['faction_name_' . $faction_loop];
-			while ($character_loop <= 12) {
-				if ($character_data['faction_' . $faction_loop . '_character_' . $character_loop . '_deleted'] == 0) {
-					//get character names
-					$character_names['faction_' . $faction_loop . '_character_' . $character_loop . '_name'] = $_POST['faction_' . $faction_loop . '_character_' . $character_loop . '_name'];
-					//get player names
-					$player_names['faction_' . $faction_loop . '_character_' . $character_loop . '_player'] = $_POST['faction_' . $faction_loop . '_character_' . $character_loop . '_player'];
-				}
-				$character_loop++;
-			}
-		}
-		$faction_loop++;
-		$character_loop = 1;
-	}
-	update_names($project_id, $_POST['project_name'], $faction_names, $character_names, $player_names);			
-	echo '<meta HTTP-EQUIV="REFRESH" content="0; url=edit_project.php?success">';
-	exit();
 }
 ?>
 <!DOCTYPE html>
@@ -147,7 +150,6 @@ if (isset($_GET['submit']) && empty($_GET['submit'])) {
 		<link rel="stylesheet" href="css/primary.css">
 		<script src="includes/jquery-1.9.0.min.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-		<!--script src="includes/jquery.jeditable.mini.js"></script-->
 		<script type="text/javascript" src="/includes/javascript_edit.js"></script>
 		<style>
 		i.fa {
@@ -177,9 +179,10 @@ if (isset($_GET['submit']) && empty($_GET['submit'])) {
 			<li class="selected"><a href="edit_project.php">Edit Project</a></li>
 			<li><a href="grid.php">Grid</a></li>
 			<li><a href="character_card.php">Character Cards</a></li>
+			<li><a href="print.php" target="_blank">Print CC's</a></li>
 		</ul>
 		<div id="grid_container">	
-			<form action="edit_project.php" method="post" role="form">
+			<form action="edit_project.php?action=save-form" method="post" role="form">
 				<div class="edit-project">
 				<?php if ( ! empty($errors)) {
 					echo output_errors($errors);
@@ -212,7 +215,7 @@ if (isset($_GET['submit']) && empty($_GET['submit'])) {
 				<a title="Delete Faction" class="delete_faction" id="delete_faction_<?php echo $faction_num; ?>" data-faction-id="<?php echo $factions[$faction_num]['faction_id'];?>" data-faction-name="<?php echo $factions[$faction_num]['faction_name'];?>"><i class="fa fa-times fa-2x"></i></a>
 				&nbsp;
 				<strong>Faction:</strong>
-				<input type="text" name="faction_name_<?php echo $faction_num; ?>" class="edit" value="<?php echo $factions[$faction_num]['faction_name'];?>"></input>
+				<input type="text" name="names[<?php echo $faction_num; ?>][faction_name]" class="edit" value="<?php echo @$factions[$faction_num]['faction_name'];?>"></input>
 				&nbsp;&nbsp;&nbsp;Number of Characters: <?php echo count($faction_characters); ?> / <?php echo CHARACTER_LIMIT; ?>
 				<br >
 				<br >
@@ -221,9 +224,11 @@ if (isset($_GET['submit']) && empty($_GET['submit'])) {
 					<li>
 						<a title="Delete Character" class="delete_character" id="delete_character_<?php echo $character_num; ?>" data-character-id="<?php echo $character['character_id'];?>" data-character-name="<?php echo $character['character_name'];?>"><i class="fa fa-times fa-2x"></i></a>
 						&nbsp;Character:
-						<input class="character-names" type="text" name="faction_<?php echo $faction_num;?>_character_<?php echo $character_num;?>_name" value="<?php echo $character['character_name'];?>"></input>
+						<input class="character-names" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][character_name]" value="<?php echo $character['character_name'];?>"></input>
 						&nbsp;&nbsp;Player:
-						<input type="text" name="faction_<?php echo $faction_num;?>_character_<?php echo $character_num;?>_player" value="<?php echo $character['player_name'];?>"></input>
+						<input type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][player_name]" value="<?php echo $character['player_name'];?>"></input>
+						&nbsp;&nbsp;Bio:
+						<input type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][character_bio]" value="<?php echo $character['character_bio'];?>"></input>
 					</li>
 				<?php endforeach; ?>
 				</ul>

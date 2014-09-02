@@ -2,11 +2,11 @@
 include 'core/init.php';
 include 'includes/overall/overall_header.php';
 
-if (empty($_POST) === false) {
+if ( ! empty($_POST)) {
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 
-	if (empty($username) === true || empty($password) === true) {
+	if (empty($username) || empty($password)) {
 		$errors[] = 'You need to enter a user name and password';
 	} else if (user_exists($username) === false) {
 		$errors[] = 'That user name does not exist.  Please click Register below.';
@@ -32,8 +32,6 @@ if (empty($_POST) === false) {
 } else {
 	$errors[] = 'No data recieved';
 }
-
-
 	
 if (empty($errors) === false) {
 	print "<h2>We tried to log you in, but...</h2>";

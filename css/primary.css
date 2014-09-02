@@ -72,7 +72,7 @@ ul li input[type="number"].small_text {
 }
 
 .dropdown, .faction_picker {
-	font-size:24pt;
+	font-size:14pt;
 }
 
 input[type="submit"] {
@@ -127,18 +127,18 @@ footer {
 .block {
 	position:relative;
 	float:left;
-	width:64px;
-	height:27px;
+	width:78px;
+	height:44px;
 	background:#0A97FF;
 	color:white;
 	text-align:center;
-	padding:8px;
+	padding-top:10px;
 	border:1px solid black;
-	margin: 3px;
+	margin: 2px;
 	z-index:9999;
 	overflow:hidden;
 	line-height: 13px;
-	font-size: 15px;
+	font-size: 14px;
 	
 }
 
@@ -160,267 +160,6 @@ text-decoration: none;
   visibility: hidden;
   width: 0;
   height: 0;
-}
-
-/* Full row and column locations (non-hovered) */
-
-#grid_container>.columna, #grid_container>.columnfaction, #grid_container>.columnb, #grid_container>.columnc, #grid_container>.columnd, #grid_container>.columne, #grid_container>.columnf, #grid_container>.columng, #grid_container>.columnh, #grid_container>.columni, #grid_container>.columnj, #grid_container>.columnk, #grid_container>.columnl, #grid_container>.columnm {
-	position:absolute;
-	left:0px;
-	top:166px;
-	height:662px;
-	width:82px;
-	background:#104E8B;
-	z-index:9998;
-	opacity:.7;
-	 visibility:hidden; 
-	
-}
-#grid_container>.columnfaction {left:140px;}
-#grid_container>.columna {left:228px;}
-#grid_container>.columnb {left:316px;}
-#grid_container>.columnc {left:404px;}
-#grid_container>.columnd {left:492px;}
-#grid_container>.columne {left:580px;}
-#grid_container>.columnf {left:581px;}
-#grid_container>.columng {left:757px;}
-#grid_container>.columnh {left:845px;}
-#grid_container>.columni {left:933px;}
-#grid_container>.columnj {left:1021px;}
-#grid_container>.columnk {left:1109px;}
-#grid_container>.columnl {left:1197px}
-#grid_container>.columnm {left:1197px;}
- 
-.hidden_visible{
-	visibility:hidden;
-}
-
-
-.row1, .row2, .row3, .row4, .row5, .row6, .row7, .row8, .row9, .row10, .row11, .row12 {
-	position:absolute;
-	height:49px;
-	width:1233px;
-	background:red;
-	z-index:9998;
-	opacity:.7;
-	visibility:hidden;
-}
-
-#grid_container>.row1 {top:268px;}
-#grid_container>.row2 {top:319px;}
-#grid_container>.row3 {top:370px;}
-#grid_container>.row4 {top:421px;}
-#grid_container>.row5 {top:472px;}
-#grid_container>.row6 {top:485px;}
-#grid_container>.row7 {top:523px;}
-#grid_container>.row8 {top:574px;}
-#grid_container>.row9 {top:625px;}
-#grid_container>.row10 {top:676px;}
-#grid_container>.row11 {top:727px;}
-#grid_container>.row12 {top:778px;}
-
-
-/* Hover commands */
-
-.block:hover { /* cell highlight */
-	background:purple;
-}
-
-.faction{
-	background:black;
-	color:#00ff00;
-}
-
-#grid_container>.columna:hover,  
-#faction2faction:hover~.columnfaction,  
-#character_to_faction_1:hover~.columnfaction,  
-#character_to_faction_2:hover~.columnfaction,  
-#character_to_faction_3:hover~.columnfaction,  
-#character_to_faction_4:hover~.columnfaction,  
-#character_to_faction_5:hover~.columnfaction,  
-#character_to_faction_6:hover~.columnfaction,  
-#character_to_faction_7:hover~.columnfaction,  
-#character_to_faction_8:hover~.columnfaction,  
-#character_to_faction_9:hover~.columnfaction,  
-#character_to_faction_10:hover~.columnfaction,  
-#character_to_faction_11:hover~.columnfaction,  
-#character_to_faction_12:hover~.columnfaction,  
-#columnheadera:hover~.columna,  
-#block1a:hover~.columna,  
-#block2a:hover~.columna,  
-#block3a:hover~.columna,  
-#block4a:hover~.columna,  
-#block5a:hover~.columna,  
-#block6a:hover~.columna,  
-#block7a:hover~.columna,  
-#block8a:hover~.columna,  
-#block9a:hover~.columna,  
-#block10a:hover~.columna,  
-#block11a:hover~.columna,  
-#block12a:hover~.columna,  
-#grid_container>.columnb:hover,  
-#columnheaderb:hover~.columnb,  
-#block1b:hover~.columnb,  
-#block2b:hover~.columnb,  
-#block3b:hover~.columnb,  
-#block4b:hover~.columnb,  
-#block5b:hover~.columnb,  
-#block6b:hover~.columnb,  
-#block7b:hover~.columnb,  
-#block8b:hover~.columnb,  
-#block9b:hover~.columnb,  
-#block10b:hover~.columnb,  
-#block11b:hover~.columnb,  
-#block12b:hover~.columnb,  
-#grid_container>.columnc:hover,  
-#columnheaderc:hover~.columnc,  
-#block1c:hover~.columnc,  
-#block2c:hover~.columnc, 
-#block3c:hover~.columnc,  
-#block4c:hover~.columnc,  
-#block5c:hover~.columnc,  
-#block6c:hover~.columnc,  
-#block7c:hover~.columnc,  
-#block8c:hover~.columnc,  
-#block9c:hover~.columnc,  
-#block10c:hover~.columnc,  
-#block11c:hover~.columnc,  
-#block12c:hover~.columnc,  
-#grid_container>.columnd:hover,  
-#columnheaderd:hover~.columnd,  
-#block1d:hover~.columnd,  
-#block2d:hover~.columnd,  
-#block3d:hover~.columnd,  
-#block4d:hover~.columnd,  
-#block5d:hover~.columnd,  
-#block6d:hover~.columnd,  
-#block7d:hover~.columnd,  
-#block8d:hover~.columnd,  
-#block9d:hover~.columnd,  
-#block10d:hover~.columnd,  
-#block11d:hover~.columnd,  
-#block12d:hover~.columnd,  
-#grid_container>.columne:hover,  
-#columnheadere:hover~.columne,  
-#block1e:hover~.columne,  
-#block2e:hover~.columne,  
-#block3e:hover~.columne,  
-#block4e:hover~.columne,  
-#block5e:hover~.columne,  
-#block6e:hover~.columne,  
-#block7e:hover~.columne,  
-#block8e:hover~.columne,  
-#block9e:hover~.columne, 
-#block10e:hover~.columne, 
-#block11e:hover~.columne, 
-#block12e:hover~.columne,
-#grid_container>.columnf:hover, 
-#columnheaderf:hover~.columnf,  
-#block1f:hover~.columnf,  
-#block2f:hover~.columnf, 
-#block3f:hover~.columnf,  
-#block4f:hover~.columnf,  
-#block5f:hover~.columnf, 
-#block6f:hover~.columnf, 
-#block7f:hover~.columnf,  
-#block8f:hover~.columnf,  
-#block9f:hover~.columnf, 
-#block10f:hover~.columnf,  
-#block11f:hover~.columnf, 
-#block12f:hover~.columnf, 
-#grid_container>.columng:hover,
-#columnheaderg:hover~.columng,
-#block1g:hover~.columng, 
-#block2g:hover~.columng,  
-#block3g:hover~.columng,
-#block4g:hover~.columng, 
-#block5g:hover~.columng,  
-#block6g:hover~.columng, 
-#block7g:hover~.columng,  
-#block8g:hover~.columng, 
-#block9g:hover~.columng, 
-#block10g:hover~.columng, 
-#block11g:hover~.columng, 
-#block12g:hover~.columng,
-#grid_container>.columnh:hover,
-#columnheaderh:hover~.columnh, 
-#block1h:hover~.columnh,  
-#block2h:hover~.columnh,
-#block3h:hover~.columnh, 
-#block4h:hover~.columnh, 
-#block5h:hover~.columnh,  
-#block6h:hover~.columnh,  
-#block7h:hover~.columnh,  
-#block8h:hover~.columnh, 
-#block9h:hover~.columnh, 
-#block10h:hover~.columnh, 
-#block11h:hover~.columnh, 
-#block12h:hover~.columnh,
-#grid_container>.columni:hover, 
-#columnheaderi:hover~.columni,
-#block1i:hover~.columni, 
-#block2i:hover~.columni, 
-#block3i:hover~.columni, 
-#block4i:hover~.columni, 
-#block5i:hover~.columni, 
-#block6i:hover~.columni, 
-#block7i:hover~.columni, 
-#block8i:hover~.columni, 
-#block9i:hover~.columni, 
-#block10i:hover~.columni,
-#block11i:hover~.columni,
-#block12i:hover~.columni,
-#grid_container>.columnj:hover, 
-#columnheaderj:hover~.columnj, 
-#block1j:hover~.columnj,  
-#block2j:hover~.columnj,  
-#block3j:hover~.columnj,  
-#block4j:hover~.columnj,  
-#block5j:hover~.columnj,  
-#block6j:hover~.columnj,  
-#block7j:hover~.columnj, 
-#block8j:hover~.columnj, 
-#block9j:hover~.columnj, 
-#block10j:hover~.columnj, 
-#block11j:hover~.columnj, 
-#block12j:hover~.columnj, 
-#grid_container>.columnk:hover, 
-#columnheaderk:hover~.columnk, 
-#block1k:hover~.columnk, 
-#block2k:hover~.columnk, 
-#block3k:hover~.columnk, 
-#block4k:hover~.columnk,  
-#block5k:hover~.columnk,  
-#block6k:hover~.columnk, 
-#block7k:hover~.columnk, 
-#block8k:hover~.columnk, 
-#block9k:hover~.columnk,  
-#block10k:hover~.columnk, 
-#block11k:hover~.columnk,  
-#block12k:hover~.columnk,  
-#grid_container>.columnl:hover, 
-#columnheaderl:hover~.columnl, 
-#block1l:hover~.columnl, 
-#block2l:hover~.columnl, 
-#block3l:hover~.columnl,  
-#block4l:hover~.columnl,  
-#block5l:hover~.columnl,  
-#block6l:hover~.columnl,  
-#block7l:hover~.columnl,  
-#block8l:hover~.columnl,  
-#block9l:hover~.columnl, 
-#block10l:hover~.columnl, 
-#block11l:hover~.columnl, 
-#block12l:hover~.columnl  {
-    
-    visibility:  visible;
-    
-    
-}
-
-
- #grid_container>.row1:hover, #grid_container>.row2:hover, #grid_container>.row3:hover, #grid_container>.row4:hover, #grid_container>.row5:hover, #grid_container>.row6:hover, #grid_container>.row7:hover, #grid_container>.row8:hover, #grid_container>.row9:hover, #grid_container>.row10:hover, #grid_container>.row11:hover, #grid_container>.row12:hover, #character_to_faction_1:hover~.row1, #character_to_faction_2:hover~.row2, #character_to_faction_3:hover~.row3, #character_to_faction_4:hover~.row4, #character_to_faction_5:hover~.row5, #character_to_faction_6:hover~.row6, #character_to_faction_7:hover~.row7, #character_to_faction_8:hover~.row8, #character_to_faction_9:hover~.row9, #character_to_faction_10:hover~.row10, #character_to_faction_11:hover~.row11, #character_to_faction_12:hover~.row12, #rowheader1:hover~.row1, #rowheader2:hover~.row2, #rowheader3:hover~.row3, #rowheader4:hover~.row4, #rowheader5:hover~.row5, #rowheader6:hover~.row6, #rowheader7:hover~.row7, #rowheader8:hover~.row8, #rowheader9:hover~.row9, #rowheader10:hover~.row10, #rowheader11:hover~.row11, #rowheader12:hover~.row12, #block1a:hover~.row1, #block2a:hover~.row2, #block3a:hover~.row3, #block4a:hover~.row4, #block5a:hover~.row5, #block6a:hover~.row6, #block7a:hover~.row7, #block8a:hover~.row8, #block9a:hover~.row9, #block10a:hover~.row10, #block11a:hover~.row11, #block12a:hover~.row12, #block12a:hover~.column, #block1b:hover~.row1, #block2b:hover~.row2, #block3b:hover~.row3, #block4b:hover~.row4, #block5b:hover~.row5, #block6b:hover~.row6, #block7b:hover~.row7, #block8b:hover~.row8, #block9b:hover~.row9, #block10b:hover~.row10, #block11b:hover~.row11, #block12b:hover~.row12, #block12b:hover~.column, #block1c:hover~.row1, #block2c:hover~.row2, #block3c:hover~.row3, #block4c:hover~.row4, #block5c:hover~.row5, #block6c:hover~.row6, #block7c:hover~.row7, #block8c:hover~.row8, #block9c:hover~.row9, #block10c:hover~.row10, #block11c:hover~.row11, #block12c:hover~.row12, #block12c:hover~.column, #block1d:hover~.row1, #block2d:hover~.row2, #block3d:hover~.row3, #block4d:hover~.row4, #block5d:hover~.row5, #block6d:hover~.row6, #block7d:hover~.row7, #block8d:hover~.row8, #block9d:hover~.row9, #block10d:hover~.row10, #block11d:hover~.row11, #block12d:hover~.row12, #block12d:hover~.column, #block1e:hover~.row1, #block2e:hover~.row2, #block3e:hover~.row3, #block4e:hover~.row4, #block5e:hover~.row5, #block6e:hover~.row6, #block7e:hover~.row7, #block8e:hover~.row8, #block9e:hover~.row9, #block10e:hover~.row10, #block11e:hover~.row11, #block12e:hover~.row12, #block12e:hover~.column, #block1f:hover~.row1, #block2f:hover~.row2, #block3f:hover~.row3, #block4f:hover~.row4, #block5f:hover~.row5, #block6f:hover~.row6, #block7f:hover~.row7, #block8f:hover~.row8, #block9f:hover~.row9, #block10f:hover~.row10, #block11f:hover~.row11, #block12f:hover~.row12, #block12f:hover~.column, #block1g:hover~.row1, #block2g:hover~.row2, #block3g:hover~.row3, #block4g:hover~.row4, #block5g:hover~.row5, #block6g:hover~.row6, #block7g:hover~.row7, #block8g:hover~.row8, #block9g:hover~.row9, #block10g:hover~.row10, #block11g:hover~.row11, #block12g:hover~.row12, #block12g:hover~.column, #block1h:hover~.row1, #block2h:hover~.row2, #block3h:hover~.row3, #block4h:hover~.row4, #block5h:hover~.row5, #block6h:hover~.row6, #block7h:hover~.row7, #block8h:hover~.row8, #block9h:hover~.row9, #block10h:hover~.row10, #block11h:hover~.row11, #block12h:hover~.row12, #block12h:hover~.column, #block1i:hover~.row1, #block2i:hover~.row2, #block3i:hover~.row3, #block4i:hover~.row4, #block5i:hover~.row5, #block6i:hover~.row6, #block7i:hover~.row7, #block8i:hover~.row8, #block9i:hover~.row9, #block10i:hover~.row10, #block11i:hover~.row11, #block12i:hover~.row12, #block12i:hover~.column, #block1j:hover~.row1, #block2j:hover~.row2, #block3j:hover~.row3, #block4j:hover~.row4, #block5j:hover~.row5, #block6j:hover~.row6, #block7j:hover~.row7, #block8j:hover~.row8, #block9j:hover~.row9, #block10j:hover~.row10, #block11j:hover~.row11, #block12j:hover~.row12, #block12j:hover~.column, #block1k:hover~.row1, #block2k:hover~.row2, #block3k:hover~.row3, #block4k:hover~.row4, #block5k:hover~.row5, #block6k:hover~.row6, #block7k:hover~.row7, #block8k:hover~.row8, #block9k:hover~.row9, #block10k:hover~.row10, #block11k:hover~.row11, #block12k:hover~.row12, #block12k:hover~.column, #block1l:hover~.row1, #block2l:hover~.row2, #block3l:hover~.row3, #block4l:hover~.row4, #block5l:hover~.row5, #block6l:hover~.row6, #block7l:hover~.row7, #block8l:hover~.row8, #block9l:hover~.row9, #block10l:hover~.row10, #block11l:hover~.row11, #block12l:hover~.row12, #block12l:hover~.column {
-    visibility:visible;
 }
 
 .edit {

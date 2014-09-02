@@ -49,6 +49,7 @@ if ( ! empty($_POST)) {
 			<li><a href="edit_project.php">Edit Project</a></li>
 			<li><a href="grid.php">Grid</a></li>
 			<li><a href="character_card.php">Character Cards</a></li>
+			<li><a href="print.php" target="_blank">Print CC's</a></li>
 		</ul>
 		<div id="grid_container">
 			<h2>New Project</h2>

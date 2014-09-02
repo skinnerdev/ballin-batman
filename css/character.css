@@ -123,15 +123,18 @@ footer {
 .block {
 	position:relative;
 	float:left;
-	width:80px;
-	height:27px;
+	width:78px;
+	height:44px;
 	background:#0A97FF;
 	color:white;
 	text-align:center;
-	padding-top:11px;
+	padding-top:10px;
 	border:1px solid black;
-	margin: 3px;
+	margin: 2px;
 	z-index:9999;
+	overflow:hidden;
+	line-height: 13px;
+	font-size: 14px;
 }
 
 .block.hidden {

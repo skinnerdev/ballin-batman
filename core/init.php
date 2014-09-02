@@ -24,7 +24,7 @@ if (is_logged_in() === true) {
 }
 
 if ( ! empty($user_data['active_project'])) {
-	$activeProject = getProject($user_data['active_project']);
+	$activeProject = get_project($user_data['active_project']);
 }
 
 $errors = array();

@@ -20,7 +20,7 @@ if ( ! empty($_REQUEST)) {
 			$_SESSION['admin-save']['site-status'] = 1;
 		}
 	}
-	header('Location: site_settings.php');
+	header('Location: admin_site_settings.php');
 	exit;
 }
 if (isset($_SESSION['admin-save'])) {
@@ -42,7 +42,7 @@ if (isset($_SESSION['admin-save'])) {
 }
 ?>
 <div>
-	<form method="post" action="site_settings.php">
+	<form method="post" action="admin_site_settings.php">
 		<ul>
 			<li>
 				<label for="site-email">Site Email</label>

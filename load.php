@@ -2,11 +2,15 @@
 error_reporting(0);
 include 'core/init.php';
 if ( ! empty($_REQUEST['project_id'])) {
-	if (setActiveProject($_REQUEST['project_id'])) {
+	if (set_active_project($_REQUEST['project_id'])) {
 		header("Location: load.php");
 	}
 }
-$projects = getProjectList();
+$projects = get_project_list();
+if (empty($projects)) {  //redirects if there's no active project for the user (if they've not created one)
+	header("Location: new_project.php");
+	exit;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -26,6 +30,7 @@ $projects = getProjectList();
 					<li><a href="edit_project.php">Edit Project</a></li>
 					<li><a href="grid.php">Grid</a></li>
 					<li><a href="character_card.php">Character Cards</a></li>
+					<li><a href="print.php" target="_blank">Print CC's</a></li>
 				</ul>
 			<div id="grid_container">
 				<table class="table">
