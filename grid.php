@@ -281,7 +281,7 @@ for ($columnNum = 0; $columnNum < $columnCount; $columnNum ++) {
 				<br >
 				<div class="block hidden_visible"></div>
 				<div id="columnheader_receiver" class="block faction">
-					<!--<a class="iframe" href="character_card.php?faction_overview=<?php echo $receiver_id;?>">-->Faction: <?php echo $receiver_faction;?><!--</a>-->
+					<!--<a class="iframe" href="character_card.php?faction_overview=<?php echo $receiver_id;?>">--><?php echo $receiver_faction;?><!--</a>-->
 				</div>
 				<?php
 				$count = 0;
@@ -295,7 +295,7 @@ for ($columnNum = 0; $columnNum < $columnCount; $columnNum ++) {
 					<div class="block <?php echo ($target['deleted']) ? 'hidden' : '';?>" id="columnheader<?php echo $letter;?>"><a href="character_card.php?character=<?php echo $target['character_id'];?>"><?php echo $target['character_name'];?></a></div>
 				<?php endforeach; ?>
 				<span class="clear"></span>
-				<div id="rowheader_receiver" class="block faction"><!--<a class="iframe" href="character_card.php?faction_overview=<?php echo $bearer_id;?>">-->Faction: <?php echo $bearer_faction;?><!--</a>--></div>
+				<div id="rowheader_receiver" class="block faction"><!--<a class="iframe" href="character_card.php?faction_overview=<?php echo $bearer_id;?>">--><?php echo $bearer_faction;?><!--</a>--></div>
 				<div id="faction2faction" class="block"><a class="iframe" href="input.php?type=f2f&bearer=<?php echo $bearer_id;?>&receiver=<?php echo $receiver_id;?>"><?php echo $f2f_opinion_word;?></a></div>
 				<span class="clear"></span>
 				<?php
