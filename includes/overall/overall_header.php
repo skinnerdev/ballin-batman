@@ -11,7 +11,10 @@
 </head>
 <body>
 <header>
-	<h1 class="logo">The Factionizer</h1>
+	<div class="logo">
+		<img src="/images/Factionizerlogo.png">
+	</div>
+	<!-- <h1 class="logo">The Factionizer</h1> -->
 	<?php
 	$home = 'class="selected"';
 	$beta = $contact = '';

@@ -84,21 +84,12 @@ if (!isset($_GET['character']) || empty($_GET['character']) == true) {
 	</head>
 	<body>
 		<div id="container">
-			<h1>The Factionizer - Project: <?php echo $activeProject['project_name'];?></h1>
-			<ul class="menu">
-				<li><a href="index.php">Home</a></li>
-				<li><a href="new_project.php">New</a></li>
-				<li><a href="load.php">Open</a></li>
-				<li><a href="edit_project.php">Edit Project</a></li>
-				<li><a href="grid.php">Grid</a></li>
-				<li class="selected"><a href="character_card.php">Character Cards</a></li>
-				<li><a href="print.php" target="_blank">Print CC's</a></li>
-			</ul>
 			<div id="grid_container">
-				<h2>Character Name: <?php echo $character_data['character']['character_name'];?><h2>
-				<h4>Player Name: <?php echo $character_data['character']['player_name'];?><h4>
-				<h4>Faction: <?php echo $character_data['faction']['faction_name'];?><h4>
-				<h4>Bio:<h4>
+				<h2>Character Name: <?php echo $character_data['character']['character_name'];?></h2>
+				<h4>Player Name: <?php echo $character_data['character']['player_name'];?></h4>
+				<h4>Faction: <?php echo $character_data['faction']['faction_name'];?></h4>
+				<h4>Priority: <?php echo $character_data['character']['priority_label'];?></h4>
+				<h4>Bio:</h4>
 				<p>
 					<?php echo $character_data['character']['character_bio'];?>
 				</p>

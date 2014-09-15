@@ -15,10 +15,11 @@ if ( ! empty($_POST)) {
 		echo 'Creating your data...';
 		$user_id = $_SESSION['user_id'];
 		$project_name = $_POST['project_name'];
-		$project_data = array(); 
-		foreach ($_POST['faction'] as $key => $faction) {
+		$project_data = array();
+		$i = 1;
+		foreach ($_POST['faction'] as $faction) {
 			if ( ! empty($faction)) {
-				$project_data['faction'][$key] = $faction;
+				$project_data['faction'][$i++] = $faction;
 			}
 		}
 		$faction_qty = count($project_data['faction']);
@@ -41,7 +42,10 @@ if ( ! empty($_POST)) {
 </head>
 <body>
 	<div id="container">
-		<h1>The Factionizer</h1>
+		<!-- <h1>The Factionizer</h1> -->
+		<div class="logo">
+			<img src="/images/Factionizerlogo.png" alt="The Factionizer">
+		</div>
 		<ul class="menu">
 			<li><a href="index.php">Home</a></li>
 			<li class="selected"><a href="new_project.php">New</a></li>

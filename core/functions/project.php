@@ -163,6 +163,23 @@ function get_character_data($project_id, $character_id) {
 	if ($rs) {
 		$result = mysql_fetch_assoc($rs);
 		if ( ! empty($result)) {
+			switch ($result['priority']) {
+				case '0':
+					$result['priority_label'] = "No Priority";
+					break;
+				case '1':
+					$result['priority_label'] = "A";
+					break;
+				case '2':
+					$result['priority_label'] = "B";
+					break;
+				case '3':
+					$result['priority_label'] = "C";
+					break;
+				case '4':
+					$result['priority_label'] = "D";
+					break;
+			}	
 			$return['character'] = $result;
 			$return['faction'] = get_faction_by_num($project_id, $return['character']['faction']);
 			return $return;
@@ -199,33 +216,45 @@ function save_opinion($type, $project_id, $bearer_id, $receiver_id, $opinion_wor
 	if ($type != 'c2c' && $type != 'c2f' && $type != 'f2f') {
 		return false;
 	}
+	$column1 = 'character';
+	$column2 = 'faction';
+	switch ($type) {
+		case 'c2c':
+			$column2 = 'character';
+			break;
+		case 'f2f':
+			$column1 = 'faction';
+			break;
+	}
 	$opinion_word = sanitize($opinion_word);
 	$opinion_text = sanitize($opinion_text);
-	if ($opinion_id) {
-		$opinion_id = (int)$opinion_id;
-		$q = "
-			UPDATE `opinions_$type`
-			SET `opinion_word`= '$opinion_word', `opinion_text`= '$opinion_text'
-			WHERE `opinion_id` = $opinion_id;
-		";
-	} else {
+	if ($opinion_word == 'no_opinion') {
 		$bearer_id = (int)$bearer_id;
 		$receiver_id = (int)$receiver_id;
 		$project_id = (int)$project_id;
-		$column1 = 'character';
-		$column2 = 'faction';
-		switch ($type) {
-			case 'c2c':
-				$column2 = 'character';
-				break;
-			case 'f2f':
-				$column1 = 'faction';
-				break;
-		}
 		$q = "
-			INSERT INTO `opinions_$type` (`{$column1}_1_id`, `{$column2}_2_id`, `opinion_word`, `opinion_text`, `project_id`)
-			VALUES ('$bearer_id', '$receiver_id', '$opinion_word', '$opinion_text', '$project_id');
+			DELETE FROM `opinions_$type`
+			WHERE `{$column1}_1_id` = '$bearer_id'
+			  AND `{$column2}_2_id` = '$receiver_id'
+			  AND `project_id` = '$project_id';
 		";
+	} else {
+		if ($opinion_id) {
+			$opinion_id = (int)$opinion_id;
+			$q = "
+				UPDATE `opinions_$type`
+				SET `opinion_word`= '$opinion_word', `opinion_text`= '$opinion_text'
+				WHERE `opinion_id` = $opinion_id;
+			";
+		} else {
+			$bearer_id = (int)$bearer_id;
+			$receiver_id = (int)$receiver_id;
+			$project_id = (int)$project_id;
+			$q = "
+				INSERT INTO `opinions_$type` (`{$column1}_1_id`, `{$column2}_2_id`, `opinion_word`, `opinion_text`, `project_id`)
+				VALUES ('$bearer_id', '$receiver_id', '$opinion_word', '$opinion_text', '$project_id');
+			";
+		}
 	}
 	if (mysql_query($q)) {
 		return true;
@@ -273,6 +302,15 @@ function save_project_data($project_id, $save_data) {
 						";
 						$save = mysql_query($q);
 					}
+					if (isset($character['priority'])) {
+						$priority = sanitize($character['priority']);
+						$q = "
+							UPDATE `characters`
+							SET `priority` = '$priority'
+							WHERE `character_id` = '$character_id';
+						";
+						$save = mysql_query($q);
+					}					
 					if (isset($character['player_name'])) {
 						$player_name = sanitize($character['player_name']);
 						$q = "
@@ -362,6 +400,23 @@ function get_character($character_id) {
 	if ($project['user_id'] != $_SESSION['user_id']) {
 		return false;
 	}
+	switch ($character['priority']) {
+		case '0':
+			$character['priority_label'] = "No Priority";
+			break;
+		case '1':
+			$character['priority_label'] = "A";
+			break;
+		case '2':
+			$character['priority_label'] = "B";
+			break;
+		case '3':
+			$character['priority_label'] = "C";
+			break;
+		case '4':
+			$character['priority_label'] = "D";
+			break;
+	}
 	return array(
 		'character' => $character,
 		'project' => $project
@@ -424,6 +479,23 @@ function get_project_characters($project_id) {
 	$result = mysql_query($q);
 	$characters = array();
 	while ($row = mysql_fetch_assoc($result)) {
+		switch ($row['priority']) {
+			case '0':
+				$row['priority_label'] = "No Priority";
+				break;
+			case '1':
+				$row['priority_label'] = "A";
+				break;
+			case '2':
+				$row['priority_label'] = "B";
+				break;
+			case '3':
+				$row['priority_label'] = "C";
+				break;
+			case '4':
+				$row['priority_label'] = "D";
+				break;
+		}
 		$characters[$row['faction']][$row['character_number']] = $row;
 	}
 	return $characters;
@@ -545,4 +617,52 @@ function get_faction_data($project_id) {
 	}
 	$faction_data['faction_qty'] = $i;
 	return $faction_data;
+}
+
+function delete_project($id) {
+	if (empty($id)) {
+		return false;
+	}
+	$id = sanitize($id);
+	$sql = "SELECT * FROM `projects` WHERE `project_id` = '$id' LIMIT 1;";
+	$result = mysql_query($sql);
+	while ($project = mysql_fetch_assoc($result)) {
+		if ( ! empty($project)) {
+			if ($project['user_id'] != $_SESSION['user_id']) {
+				return false;
+			}
+			$q = "
+				DELETE FROM `characters`
+				WHERE `project_id` = '$id';
+			";
+			$result = mysql_query($q);
+			$q = "
+				DELETE FROM `factions`
+				WHERE `project_id` = '$id';
+			";
+			$result = mysql_query($q);
+			$q = "
+				DELETE FROM `opinions_c2c`
+				WHERE `project_id` = '$id';
+			";
+			$result = mysql_query($q);
+			$q = "
+				DELETE FROM `opinions_c2f`
+				WHERE `project_id` = '$id';
+			";
+			$result = mysql_query($q);
+			$q = "
+				DELETE FROM `opinions_f2f`
+				WHERE `project_id` = '$id';
+			";
+			$result = mysql_query($q);
+			$q = "
+				DELETE FROM `projects`
+				WHERE `project_id` = '$id';
+			";
+			$result = mysql_query($q);
+			return true;
+		}
+	}
+	return false;
 }

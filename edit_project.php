@@ -38,9 +38,6 @@ if ( ! empty($_POST)) {
 			break;
 		}
 	}
-	if (empty($errors)) {
-		// Do post save
-	}
 }
 
 $new_project = false;
@@ -63,15 +60,22 @@ if (isset($_GET['action'])) {
 	switch ($action) {
 		case 'restore':
 		case 'delete':
-			if ($type == 'character' || $type == 'faction') {
+			if ($type == 'character') {
 				$result = call_user_func($action . "_" . $type . "_by_id", $id);
 				if ($result) {
-					$_SESSION['edit-project-save-message'] = ucfirst("$type " . $action . "d successfully!");
+					echo json_encode("success");
+				} else {
+					echo json_encode("error");
+				}
+				exit;
+			} else {
+				$result = call_user_func($action . "_" . $type . "_by_id", $id);
+				if ($result) {
+					$_SESSION['edit-project-save-message'] = "Faction " . $action ."d sucessfully";
 				} else {
 					$result = true;
-					$_SESSION['edit-project-save-message'] = "There was a problem with the " . $action . ". Please try again.";
+					$_SESSION['edit-project-save-message'] = "There was a problem with that action.";
 				}
-
 			}
 			break;
 		case 'get-names':
@@ -92,6 +96,9 @@ if (isset($_GET['action'])) {
 			}
 			break;
 		case 'save-form':
+			if ( ! empty($errors)) {
+				break;
+			}
 			$result = true;
 			$saveData = array();
 			if (trim($_POST['project_name']) != $activeProject['project_name']) {
@@ -109,8 +116,12 @@ if (isset($_GET['action'])) {
 					if ( ! empty($charName) && $charName != $character_data[$faction_num][$character_number]['character_name']) {
 						$saveData['characters'][$character_data[$faction_num][$character_number]['character_id']]['character_name'] = $charName;
 					}
+					$characterPriority = trim($character['priority']);
+					if ($characterPriority != $character_data[$faction_num][$character_number]['priority']) {
+						$saveData['characters'][$character_data[$faction_num][$character_number]['character_id']]['priority'] = $characterPriority;
+					}
 					$playerName = trim($character['player_name']);
-					if ($playerName != $character_data[$faction_num][$character_number]['character_name']) {
+					if ($playerName != $character_data[$faction_num][$character_number]['player_name']) {
 						$saveData['characters'][$character_data[$faction_num][$character_number]['character_id']]['player_name'] = $playerName;
 					}
 					$characterBio = trim($character['character_bio']);
@@ -121,8 +132,22 @@ if (isset($_GET['action'])) {
 			}
 			if ( ! empty($saveData)) {
 				if (save_project_data($project_id, $saveData)) {
+					if (isset($_GET['result']) && $_GET['result'] == 'json') {
+						echo json_encode("success");
+						exit;
+					}
 					$_SESSION['edit-project-save-message'] = "Project and names saved!";
+				} else {
+					if (isset($_GET['result']) && $_GET['result'] == 'json') {
+						echo json_encode("error");
+						exit;
+					}
 				}
+			} else {
+					if (isset($_GET['result']) && $_GET['result'] == 'json') {
+						echo json_encode("success");
+						exit;
+					}
 			}
 			break;
 	}
@@ -155,12 +180,10 @@ if (isset($_SESSION['edit-project-save-message'])) {
 		i.fa {
 			color: #548B54;
 		}
-		a.delete_faction i, a.delete_character i {
-			float: left;
-			margin-right: 10px;
+		a.delete_faction i, i.delete-character {
 			color: #ff0000;
 		}
-		a.restore_character, #random-names, #add-faction {
+		a.toggle_character, #random-names, #add-faction, #clear-character-names, #clear-player-names, #clear-character-bio {
 			float: left;
 			margin-right: 10px;
 		}
@@ -171,7 +194,10 @@ if (isset($_SESSION['edit-project-save-message'])) {
 	</head>
 	<body>
 	<div id="container">
-		<h1>The Factionizer - Project: <?php echo $activeProject['project_name'];?></h1>
+		<div class="logo">
+			<img src="/images/Factionizerlogo.png">
+		</div>
+		<!-- <h1>The Factionizer - Project: <?php echo $activeProject['project_name'];?></h1> -->
 		<ul class="menu">
 			<li><a href="index.php">Home</a></li>
 			<li><a href="new_project.php">New</a></li>
@@ -182,7 +208,7 @@ if (isset($_SESSION['edit-project-save-message'])) {
 			<li><a href="print.php" target="_blank">Print CC's</a></li>
 		</ul>
 		<div id="grid_container">	
-			<form action="edit_project.php?action=save-form" method="post" role="form">
+			<form action="edit_project.php?action=save-form" method="post" role="form" id="project-form">
 				<div class="edit-project">
 				<?php if ( ! empty($errors)) {
 					echo output_errors($errors);
@@ -200,49 +226,118 @@ if (isset($_SESSION['edit-project-save-message'])) {
 				<h3>
 					<label for="project_name">Project Name:</label>
 					<input type="text" name="project_name" value="<?php echo $activeProject['project_name'];?>"></input>
-					&nbsp;&nbsp;&nbsp;Number of Factions: <span id="faction-count"><?php echo $activeProject['faction_qty'];?></span> / <span id="faction-limit"><?php echo FACTION_LIMIT; ?></span>
+					&nbsp;&nbsp;&nbsp;Active factions: <span id="faction-count"><?php echo ($activeProject['faction_qty'] - count($deleted_factions));?></span> / <span id="faction-limit"><?php echo FACTION_LIMIT; ?></span>
 				</h3>
-				<p>
-					<a id="random-names"><i class="fa fa-random fa-2x"></i></a>Create random names for any blank Character names.
-				</p>
 				<?php if ($activeProject['faction_qty'] < FACTION_LIMIT) : ?>
 				<p id="add-faction-container">
-					<a id="add-faction"><i class="fa fa-plus fa-2x"></i></a>Add another faction.
+					<a id="add-faction"><i class="fa fa-plus fa-2x"></i></a>Add another faction
 				</p>
 				<?php endif; ?>
+				<p>
+					<a id="random-names"><i class="fa fa-random fa-2x"></i></a>Randomize Names
+				</p>
+				<p>
+					<a id="clear-character-names"><i class="fa fa-times fa-2x"></i></a>Clear all character names
+				</p>
+				<p>
+					<a id="clear-player-names"><i class="fa fa-times fa-2x"></i></a>Clear all player names
+				</p>
+				<p>
+					<a id="clear-character-bio"><i class="fa fa-times fa-2x"></i></a>Clear all characters Bio
+				</p>
 				<br >
 				<?php foreach ($character_data as $faction_num => $faction_characters) : ?>
 				<a title="Delete Faction" class="delete_faction" id="delete_faction_<?php echo $faction_num; ?>" data-faction-id="<?php echo $factions[$faction_num]['faction_id'];?>" data-faction-name="<?php echo $factions[$faction_num]['faction_name'];?>"><i class="fa fa-times fa-2x"></i></a>
 				&nbsp;
 				<strong>Faction:</strong>
 				<input type="text" name="names[<?php echo $faction_num; ?>][faction_name]" class="edit" value="<?php echo @$factions[$faction_num]['faction_name'];?>"></input>
-				&nbsp;&nbsp;&nbsp;Number of Characters: <?php echo count($faction_characters); ?> / <?php echo CHARACTER_LIMIT; ?>
+				<!-- &nbsp;&nbsp;&nbsp;Number of Characters: <?php echo count($faction_characters); ?> / <?php echo CHARACTER_LIMIT; ?>-->
 				<br >
 				<br >
-				<ul>
-				<?php foreach ($faction_characters as $character_num => $character) : ?>
-					<li>
-						<a title="Delete Character" class="delete_character" id="delete_character_<?php echo $character_num; ?>" data-character-id="<?php echo $character['character_id'];?>" data-character-name="<?php echo $character['character_name'];?>"><i class="fa fa-times fa-2x"></i></a>
+				<ul id="active_characters_<?php echo $faction_num;?>">
+				<?php foreach ($faction_characters as $character_num => $character) :
+					$optionA = $optionB = $optionC = $optionD = $optionE = $option0 = '';
+					switch ($character['priority']) {
+						case '0':
+							$option0 = 'selected="selected"';
+							break;
+						case '1':
+							$optionA = 'selected="selected"';
+							break;
+						case '2':
+							$optionB = 'selected="selected"';
+							break;
+						case '3':
+							$optionC = 'selected="selected"';
+							break;
+						case '4':
+							$optionD = 'selected="selected"';
+							break;
+						default:
+					}
+					?>
+					<li id="character_<?php echo $character['character_id'];?>">
+						<a title="Delete Character" class="toggle_character" data-action="delete" data-character-id="<?php echo $character['character_id'];?>" data-character-faction="<?php echo $faction_num;?>" data-character-num="<?php echo $character_num;?>" data-character-name="<?php echo $character['character_name'];?>"><i class="fa fa-times fa-2x delete-character"></i></a>
 						&nbsp;Character:
 						<input class="character-names" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][character_name]" value="<?php echo $character['character_name'];?>"></input>
+						&nbsp;&nbsp;Priority:
+						<select name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][priority]">
+							<option value="0" <?php echo $option0;?>>None</option>
+							<option value="1" <?php echo $optionA;?>>A</option>
+							<option value="2" <?php echo $optionB;?>>B</option>
+							<option value="3" <?php echo $optionC;?>>C</option>
+							<option value="4" <?php echo $optionD;?>>D</option>
+						</select>
 						&nbsp;&nbsp;Player:
-						<input type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][player_name]" value="<?php echo $character['player_name'];?>"></input>
+						<input class="player-names" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][player_name]" value="<?php echo $character['player_name'];?>"></input>
 						&nbsp;&nbsp;Bio:
-						<input type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][character_bio]" value="<?php echo $character['character_bio'];?>"></input>
+						<input class="character-bio" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][character_bio]" value="<?php echo $character['character_bio'];?>"></input>
 					</li>
 				<?php endforeach; ?>
 				</ul>
-				<?php if ( ! empty($deleted_characters[$faction_num])) : ?>
-				<ul>
-					<li><p>Deleted Characters in this faction</p></li>
-					<?php foreach ($deleted_characters[$faction_num] as $character_num => $character) : ?>
-					<li>
-						<a title="Restore Character" class="restore_character" id="restore_character_<?php echo $character_num;?>" data-character-id="<?php echo $character['character_id'];?>" data-character-name="<?php echo $character['character_name'];?>"><i class="fa fa-undo fa-lg"></i></a>
-						&nbsp;Character: <?php echo $character['character_name'];?>
+				<ul id="deleted_characters_<?php echo $faction_num;?>">
+					<?php if ( ! empty($deleted_characters[$faction_num])) : ?>
+					<?php foreach ($deleted_characters[$faction_num] as $character_num => $character) :
+					$optionA = $optionB = $optionC = $optionD = $optionE = $option0 = '';
+					switch ($character['priority']) {
+						case '0':
+							$option0 = 'selected="selected"';
+							break;
+						case '1':
+							$optionA = 'selected="selected"';
+							break;
+						case '2':
+							$optionB = 'selected="selected"';
+							break;
+						case '3':
+							$optionC = 'selected="selected"';
+							break;
+						case '4':
+							$optionD = 'selected="selected"';
+							break;
+						default:
+					}
+					?>
+					<li id="character_<?php echo $character['character_id'];?>">
+						<a title="Restore Character" class="toggle_character" data-action="restore" data-character-id="<?php echo $character['character_id'];?>" data-character-faction="<?php echo $faction_num;?>" data-character-num="<?php echo $character_num;?>" data-character-name="<?php echo $character['character_name'];?>"><i class="fa fa-undo fa-lg restore-character"></i></a>
+						&nbsp;Character:
+						<input disabled class="character-names" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][character_name]" value="<?php echo $character['character_name'];?>"></input>
+						&nbsp;&nbsp;Priority:
+						<select disabled name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][priority]">
+							<option value="0" <?php echo $option0;?>>None</option>
+							<option value="1" <?php echo $optionA;?>>A</option>
+							<option value="2" <?php echo $optionB;?>>B</option>
+							<option value="3" <?php echo $optionC;?>>C</option>
+							<option value="4" <?php echo $optionD;?>>D</option>
+						</select>
+						&nbsp;&nbsp;Player:
+						<input disabled class="player-names" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][player_name]" value="<?php echo $character['player_name'];?>"></input>
+						&nbsp;&nbsp;Bio:
+						<input disabled class="character-bio" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][character_bio]" value="<?php echo $character['character_bio'];?>"></input>
 					</li>
 					<?php endforeach ; ?>
+					<?php endif; ?>
 				</ul>
-				<?php endif; ?>
 				<?php endforeach; ?>
 				<?php if ( ! empty($deleted_factions)) : ?>
 				<h4>Deleted Factions</h4>

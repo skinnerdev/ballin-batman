@@ -160,7 +160,12 @@ foreach ($display_data as $data) {
 		<script>
 			$(document).ready(function(){
 				$(".iframe").colorbox();
-				$(".iframe").colorbox({iframe:true, width:"80%", height:"80%"});
+				$(".iframe").colorbox({
+					iframe:true,
+					width:"85%",
+					height:"85%",
+					top: '20px'
+				});
 			});
 		</script>
 		<style>
@@ -249,7 +254,10 @@ for ($columnNum = 0; $columnNum < $columnCount; $columnNum ++) {
 	</head>
 	<body>
 		<div id="container">
-			<h1>The Factionizer - Project: <?php echo $activeProject['project_name'];?></h1>
+			<div class="logo">
+				<img src="/images/Factionizerlogo.png">
+			</div>
+			<!-- <h1>The F-ctionizer - Project: <?php echo $activeProject['project_name'];?></h1> -->
 			<ul class="menu">
 				<li><a href="index.php">Home</a></li>
 				<li><a href="new_project.php">New</a></li>
@@ -292,7 +300,7 @@ for ($columnNum = 0; $columnNum < $columnCount; $columnNum ++) {
 					$letter = $alpha[$count];
 					$count++;
 				?>
-					<div class="block <?php echo ($target['deleted']) ? 'hidden' : '';?>" id="columnheader<?php echo $letter;?>"><a href="character_card.php?character=<?php echo $target['character_id'];?>"><?php echo $target['character_name'];?></a></div>
+					<div class="block <?php echo ($target['deleted']) ? 'hidden' : '';?>" id="columnheader<?php echo $letter;?>"><a href="character_card.php?character=<?php echo $target['character_id'];?>" class="iframe"><?php echo $target['character_name'];?></a></div>
 				<?php endforeach; ?>
 				<span class="clear"></span>
 				<div id="rowheader_receiver" class="block faction"><!--<a class="iframe" href="character_card.php?faction_overview=<?php echo $bearer_id;?>">--><?php echo $bearer_faction;?><!--</a>--></div>

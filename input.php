@@ -49,18 +49,28 @@ switch ($type) {
 	default:
 		$note_text = "No opinion set.";
 }
+
+$noOpinionText = "No Opinion";
 switch ($type) {
 	case 'c2c':
-		$header = "Character's opinion of Character";
-		$subHeader = "{$opinion['bearer']['character']['character_name']} ({$opinion['bearer']['faction']['faction_name']}) to {$opinion['receiver']['character']['character_name']} ({$opinion['receiver']['faction']['faction_name']}): {$opinion['opinion_word']}";
+		// $header = "Character's opinion of Character";
+		// $subHeader = "{$opinion['bearer']['character']['character_name']} ({$opinion['bearer']['faction']['faction_name']}) to {$opinion['receiver']['character']['character_name']} ({$opinion['receiver']['faction']['faction_name']}): {$opinion['opinion_word']}";
+		$header = "{$opinion['bearer']['character']['character_name']}'s opinion of {$opinion['receiver']['character']['character_name']}: {$opinion['opinion_word']}";
+		$noOpinionText = "Use Faction Opinion";
 		break;
 	case 'c2f':
-		$header = "Character's opinion of Faction";
-		$subHeader = "{$opinion['bearer']['character']['character_name']} ({$opinion['bearer']['faction']['faction_name']}) to {$opinion['receiver']['faction']['faction_name']}: {$opinion['opinion_word']}";
+		// $header = "Character's opinion of Faction";
+		// $subHeader = "{$opinion['bearer']['character']['character_name']} ({$opinion['bearer']['faction']['faction_name']}) to {$opinion['receiver']['faction']['faction_name']}: {$opinion['opinion_word']}";
+		$header = "{$opinion['bearer']['character']['character_name']}'s opinion of {$opinion['receiver']['faction']['faction_name']}: {$opinion['opinion_word']}";
+		if ( ! empty($opinion['f2f'])) {
+			$noOpinionText = "Use Faction Opinion";
+		}
+		$noOpinionText = "Use Faction Opinion";
 		break;
 	case 'f2f':
-		$header = "Faction's opinion of Faction";
-		$subHeader = "{$opinion['bearer']['faction']['faction_name']} to {$opinion['receiver']['faction']['faction_name']}: {$opinion['opinion_word']}";
+		// $header = "Faction's opinion of Faction";
+		// $subHeader = "{$opinion['bearer']['faction']['faction_name']} to {$opinion['receiver']['faction']['faction_name']}: {$opinion['opinion_word']}";
+		$header = "{$opinion['bearer']['faction']['faction_name']}'s opinion of {$opinion['receiver']['faction']['faction_name']}: {$opinion['opinion_word']}";
 		break;
 }
 
@@ -107,16 +117,31 @@ if ( ! empty($_POST['opinion_word']) && isset($_POST['opinion_text'])) {
 				<?php foreach ($opinionWords as $key => $value) :
 					$checked = ( ! empty($opinion[$type]['opinion_word']) && $key == $opinion[$type]['opinion_word']) ? 'checked="checked"' : '';
 				?>
-				<input <?php echo $checked;?> type="radio" name="opinion_word" value="<?php echo $key;?>">&nbsp;<?php echo $value;?><br>
+					<input <?php echo $checked;?> type="radio" name="opinion_word" value="<?php echo $key;?>" class="opinion">&nbsp;<?php echo $value;?><br>
+				<?php $checked = (empty($opinion[$type]['opinion_word'])) ? 'checked="checked"' : ''; ?>
 				<?php endforeach; ?>
+				<input <?php echo $checked;?> type="radio" name="opinion_word" value="no_opinion" class="opinion">&nbsp;<?php echo $noOpinionText; ?><br>
+				<br />
+				<button type="submit" class="btn btn-primary btn-lg">Save</button>
 				</div>
 				<div class="col-md-6">
-					<label for="opinion_text">Opinion Text</label>
-					<textarea name="opinion_text" rows="10" cols="50"><?php echo ( ! empty($opinion[$type]['opinion_text'])) ? $opinion[$type]['opinion_text'] : '';?></textarea>	
-					<button type="submit" class="btn btn-primary btn-lg">Save</button>
+					<textarea <?php echo ($checked) ? 'disabled' : '';?> placeholder="Additional Notes" name="opinion_text" rows="10" cols="50" id="opinion-text" data-opinion-text="<?php echo ( ! empty($opinion[$type]['opinion_text'])) ? $opinion[$type]['opinion_text'] : '';?>"><?php echo ( ! empty($opinion[$type]['opinion_text'])) ? $opinion[$type]['opinion_text'] : '';?></textarea>	
 				</div>
 			</form>
 		</div>
 	</div>
 </body>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+	$('.opinion').click(function() {
+		if (this.value == 'no_opinion') {
+			$("#opinion-text").html('');
+			$("#opinion-text").prop('disabled', true);
+		} else {
+			$("#opinion-text").html($("#opinion-text").data('opinion-text'));
+			$("#opinion-text").prop('disabled', false);
+		}
+	});
+});
+</script>
 </html>
