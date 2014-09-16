@@ -161,7 +161,7 @@ foreach ($display_data as $data) {
 		<script src="javascript/bootstrap-tour.min.js"></script>
 		<script type="text/javascript">
 		var user_viewed_tutorial = <?php echo $user_data['viewed_tutorial'];?>;
-		var user_id = <?php echo $_SESSION['user_id'];?>
+		var user_id = <?php echo $_SESSION['user_id'];?>;
 		</script>
 		<script src="javascript/tour.js"></script>
 		<script>
