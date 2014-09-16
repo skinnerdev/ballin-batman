@@ -154,9 +154,16 @@ foreach ($display_data as $data) {
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/primary.css">
+		<link rel="stylesheet"  href="css/bootstrap-tour.min.css">
 		<script src="includes/jquery-1.9.0.min.js"></script>
 		<script type="text/javascript" src="/includes/colorbox.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="javascript/bootstrap-tour.min.js"></script>
+		<script type="text/javascript">
+		var user_viewed_tutorial = <?php echo $user_data['viewed_tutorial'];?>;
+		var user_id = <?php echo $_SESSION['user_id'];?>
+		</script>
+		<script src="javascript/tour.js"></script>
 		<script>
 			$(document).ready(function(){
 				$(".iframe").colorbox();
@@ -177,7 +184,7 @@ foreach ($display_data as $data) {
 	height:<?php echo ($rowCount * 48) + 96;?>px;
 	width:82px;
 	background:#104E8B;
-	z-index:9998;
+	z-index:999;
 	opacity:.7;
 	 visibility:hidden;
 }
@@ -202,7 +209,7 @@ for ($count = 1; $count <= $rowCount; $count++) {
 	height:48px;
 	width:<?php echo ($columnCount * 82) + 164;?>px;
 	background:red;
-	z-index:9998;
+	z-index:999;
 	opacity:.7;
 	visibility:hidden;
 }
@@ -257,26 +264,26 @@ for ($columnNum = 0; $columnNum < $columnCount; $columnNum ++) {
 			<div class="logo">
 				<img src="/images/Factionizerlogo.png">
 			</div>
-			<!-- <h1>The F-ctionizer - Project: <?php echo $activeProject['project_name'];?></h1> -->
+			<!-- <h1>The Factionizer - Project: <?php echo $activeProject['project_name'];?></h1> -->
 			<ul class="menu">
 				<li><a href="index.php">Home</a></li>
 				<li><a href="new_project.php">New</a></li>
 				<li><a href="load.php">Open</a></li>
 				<li><a href="edit_project.php">Edit Project</a></li>
 				<li class="selected"><a href="grid.php">Grid</a></li>
-				<li><a href="character_card.php">Character Cards</a></li>
-				<li><a href="print.php" target="_blank">Print CC's</a></li>
+				<li id="character-cards"><a href="character_card.php" target="_blank">Character Cards</a></li>
+				<li id="print-character-cards"><a href="print.php" target="_blank">Print CC's</a></li>
 			</ul>
 			<div id="grid_container">
 				<?php if ( ! empty($factionListA)) : ?>
 				<form class="faction_picker" action="">
-				How <select class="dropdown" name="bearer">
+				How <select class="dropdown" name="bearer" id="faction-left">
 				<?php
 				foreach ($factionListA as $item) {
 					echo $item;
 				}
 				?>
-				</select> feels about <select class="dropdown" name="receiver">
+				</select> feels about <select class="dropdown" name="receiver" id="faction-top">
 				<?php
 				foreach ($factionListB as $item) {
 					echo $item;
@@ -285,6 +292,7 @@ for ($columnNum = 0; $columnNum < $columnCount; $columnNum ++) {
 				?>
 				</select>&nbsp;&nbsp;
 				<input class="submit_button" type="submit" value="Update">
+				<button id="tour-start-grid" class="btn btn-primary" style="float:right;"><i class="fa fa-question-circle" style="color: #ffffff;"></i>&nbsp;Show the Tour</button>
 				</form>
 				<br >
 				<div class="block hidden_visible"></div>
@@ -347,7 +355,7 @@ for ($columnNum = 0; $columnNum < $columnCount; $columnNum ++) {
 					<div class="column<?php echo $letter;?> grid-columns"></div>
 				<?php } ?>
 				<?php for ($rowNum = 0; $rowNum < $rowCount; $rowNum++) { ?>
-					<div class="row<?php echo $rowNum + 1;?>"></div>
+					<div class="row<?php echo $rowNum + 1;?>" id="row-<?php echo $rowNum + 1;?>"></div>
 				<?php } ?>
 
 				<?php else: ?>

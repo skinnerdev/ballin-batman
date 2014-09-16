@@ -1,6 +1,20 @@
 <?php
 include 'core/init.php';
 protect_page();
+// Small section to allow users to update their tutorial flag
+if ( ! empty($_GET['action']) && ! empty($_GET['user_id'])) {
+	switch ($_GET['action']) {
+		case 'tutorial_end':
+			if ($_GET['user_id'] != $_SESSION['user_id']) {
+				echo json_encode("error");
+				exit;
+			}
+			update_user($_GET['user_id'], array('viewed_tutorial' => 1));
+			echo json_encode("success");
+			exit;
+			break;
+	}
+}
 admin_page();
 include 'includes/overall/overall_header.php';
 $users = get_user_list();

@@ -122,7 +122,7 @@ if ( ! empty($_POST['opinion_word']) && isset($_POST['opinion_text'])) {
 				<?php endforeach; ?>
 				<input <?php echo $checked;?> type="radio" name="opinion_word" value="no_opinion" class="opinion">&nbsp;<?php echo $noOpinionText; ?><br>
 				<br />
-				<button type="submit" class="btn btn-primary btn-lg">Save</button>
+				<button type="submit" class="btn btn-primary btn-lg" id="save-opinion">Save</button>
 				</div>
 				<div class="col-md-6">
 					<textarea <?php echo ($checked) ? 'disabled' : '';?> placeholder="Additional Notes" name="opinion_text" rows="10" cols="50" id="opinion-text" data-opinion-text="<?php echo ( ! empty($opinion[$type]['opinion_text'])) ? $opinion[$type]['opinion_text'] : '';?>"><?php echo ( ! empty($opinion[$type]['opinion_text'])) ? $opinion[$type]['opinion_text'] : '';?></textarea>	

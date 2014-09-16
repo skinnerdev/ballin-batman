@@ -13,7 +13,7 @@ $current_file = end($current_file);
 
 if (is_logged_in() === true) {
 	$session_user_id = $_SESSION['user_id'];
-	$user_data = get_user_data($session_user_id, 'user_id', 'username', 'password', 'first_name', 'last_name', 'email', 'password_recover', 'type', 'allow_email', 'profile', 'beta', 'active_project');  //lets me use the user data in other functions
+	$user_data = get_user_data($session_user_id, 'user_id', 'username', 'password', 'first_name', 'last_name', 'email', 'password_recover', 'type', 'allow_email', 'profile', 'beta', 'active_project', 'viewed_tutorial');  //lets me use the user data in other functions
 	if (is_user_active($user_data['username']) === false) {   //logs a user out if their account is disabled, even if they are browsing at the time
 		session_destroy();  
 		echo '<meta HTTP-EQUIV="REFRESH" content="0; url=index.php">';

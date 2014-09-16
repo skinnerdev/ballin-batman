@@ -173,9 +173,16 @@ if (isset($_SESSION['edit-project-save-message'])) {
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/primary.css">
+		<link rel="stylesheet"  href="css/bootstrap-tour.min.css">
 		<script src="includes/jquery-1.9.0.min.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/includes/javascript_edit.js"></script>
+		<script src="javascript/bootstrap-tour.min.js"></script>
+		<script type="text/javascript">
+		var user_viewed_tutorial = <?php echo $user_data['viewed_tutorial'];?>;
+		var user_id = <?php echo $_SESSION['user_id'];?>
+		</script>
+		<script src="javascript/tour.js"></script>
 		<style>
 		i.fa {
 			color: #548B54;
@@ -203,11 +210,12 @@ if (isset($_SESSION['edit-project-save-message'])) {
 			<li><a href="new_project.php">New</a></li>
 			<li><a href="load.php">Open</a></li>
 			<li class="selected"><a href="edit_project.php">Edit Project</a></li>
-			<li><a href="grid.php">Grid</a></li>
+			<li id="nav-grid"><a href="grid.php">Grid</a></li>
 			<li><a href="character_card.php">Character Cards</a></li>
 			<li><a href="print.php" target="_blank">Print CC's</a></li>
 		</ul>
 		<div id="grid_container">	
+			<button id="tour-start-edit" class="btn btn-primary" style="float:right;"><i class="fa fa-question-circle" style="color: #ffffff;"></i>&nbsp;Show the Tour</button>
 			<form action="edit_project.php?action=save-form" method="post" role="form" id="project-form">
 				<div class="edit-project">
 				<?php if ( ! empty($errors)) {
@@ -225,7 +233,7 @@ if (isset($_SESSION['edit-project-save-message'])) {
 				<?php endif; ?>
 				<h3>
 					<label for="project_name">Project Name:</label>
-					<input type="text" name="project_name" value="<?php echo $activeProject['project_name'];?>"></input>
+					<input type="text" name="project_name" value="<?php echo $activeProject['project_name'];?>" id="project-name"></input>
 					&nbsp;&nbsp;&nbsp;Active factions: <span id="faction-count"><?php echo ($activeProject['faction_qty'] - count($deleted_factions));?></span> / <span id="faction-limit"><?php echo FACTION_LIMIT; ?></span>
 				</h3>
 				<?php if ($activeProject['faction_qty'] < FACTION_LIMIT) : ?>
@@ -247,10 +255,11 @@ if (isset($_SESSION['edit-project-save-message'])) {
 				</p>
 				<br >
 				<?php foreach ($character_data as $faction_num => $faction_characters) : ?>
+				<div id="faction_<?php echo $faction_num;?>">
 				<a title="Delete Faction" class="delete_faction" id="delete_faction_<?php echo $faction_num; ?>" data-faction-id="<?php echo $factions[$faction_num]['faction_id'];?>" data-faction-name="<?php echo $factions[$faction_num]['faction_name'];?>"><i class="fa fa-times fa-2x"></i></a>
 				&nbsp;
 				<strong>Faction:</strong>
-				<input type="text" name="names[<?php echo $faction_num; ?>][faction_name]" class="edit" value="<?php echo @$factions[$faction_num]['faction_name'];?>"></input>
+				<input type="text" id="faction_name_<?php echo $faction_num;?>" name="names[<?php echo $faction_num; ?>][faction_name]" class="edit" value="<?php echo @$factions[$faction_num]['faction_name'];?>"></input>
 				<!-- &nbsp;&nbsp;&nbsp;Number of Characters: <?php echo count($faction_characters); ?> / <?php echo CHARACTER_LIMIT; ?>-->
 				<br >
 				<br >
@@ -276,18 +285,18 @@ if (isset($_SESSION['edit-project-save-message'])) {
 						default:
 					}
 					?>
-					<li id="character_<?php echo $character['character_id'];?>">
+					<li id="character_<?php echo $character['character_id'];?>" data-char-num="<?php echo $character_num;?>-<?php echo $faction_num;?>">
 						<a title="Delete Character" class="toggle_character" data-action="delete" data-character-id="<?php echo $character['character_id'];?>" data-character-faction="<?php echo $faction_num;?>" data-character-num="<?php echo $character_num;?>" data-character-name="<?php echo $character['character_name'];?>"><i class="fa fa-times fa-2x delete-character"></i></a>
-						&nbsp;Character:
-						<input class="character-names" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][character_name]" value="<?php echo $character['character_name'];?>"></input>
 						&nbsp;&nbsp;Priority:
-						<select name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][priority]">
+						<select name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][priority]" id="character_priority_<?php echo $character_num;?>">
 							<option value="0" <?php echo $option0;?>>None</option>
 							<option value="1" <?php echo $optionA;?>>A</option>
 							<option value="2" <?php echo $optionB;?>>B</option>
 							<option value="3" <?php echo $optionC;?>>C</option>
 							<option value="4" <?php echo $optionD;?>>D</option>
 						</select>
+						&nbsp;Character:
+						<input class="character-names" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][character_name]" value="<?php echo $character['character_name'];?>"></input>
 						&nbsp;&nbsp;Player:
 						<input class="player-names" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][player_name]" value="<?php echo $character['player_name'];?>"></input>
 						&nbsp;&nbsp;Bio:
@@ -338,7 +347,9 @@ if (isset($_SESSION['edit-project-save-message'])) {
 					<?php endforeach ; ?>
 					<?php endif; ?>
 				</ul>
+				</div>
 				<?php endforeach; ?>
+				<div id="deleted-factions" style="padding: 10px;">
 				<?php if ( ! empty($deleted_factions)) : ?>
 				<h4>Deleted Factions</h4>
 				<?php foreach ($deleted_factions as $faction_num => $faction_characters) : ?>
@@ -347,10 +358,11 @@ if (isset($_SESSION['edit-project-save-message'])) {
 						&nbsp;Faction: <?php echo $factions[$faction_num]['faction_name'];?>
 					</p>
 				<?php endforeach; ?>
+				</div>
 				<?php endif; ?>
 				</div>
 				<br >
-				<input type="submit" value="Save Project">
+				<input type="submit" value="Save Project" id="save-project">
 			</form>
 		<?php include 'includes/footer.php'; ?>
 		</div>
