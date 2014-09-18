@@ -56,7 +56,7 @@ jQuery(document).ready(function() {
 							aclass = "fa fa-undo fa-lg restore-character";
 							baction = 'restore';
 							place = 'deleted';
-							disabled = true;
+							disabled = 'disabled';
 							if (action == 'restore') {
 								atitle = "Delete Character";
 								aclass = "fa fa-times fa-2x delete-character";
@@ -64,8 +64,9 @@ jQuery(document).ready(function() {
 								place = 'active';
 								disabled = false;
 							}
-							$("#character_" + character_id).children("input").prop('disabled', disabled);
-							$("#character_" + character_id).children("select").prop('disabled', disabled);
+							$("#character_" + character_id).children("input").attr('disabled', disabled);
+							$("#character_" + character_id).children("select").attr('disabled', disabled);
+							$("#character_" + character_id).children("textarea").attr('disabled', disabled);
 							$("a[data-character-id='" + character_id + "']").prop('title', atitle);
 							$("a[data-character-id='" + character_id + "']").children("i").prop('class', aclass);
 							$('#' + place + '_characters_' + character_faction).append($("#character_" + character_id));
@@ -97,11 +98,14 @@ jQuery(document).ready(function() {
 			});
 		}
 	});
-	$('#clear-character-names').click(function(e) {
+	$('#clear-all-names').click(function(e) {
 		e.preventDefault();
-		if (confirm('Are you sure you want to clear all character names?')) {
+		if (confirm('Are you sure you want to clear all character and faction names?')) {
 			//var emptyCharacterNames = $('.character-names').filter(function() { return this.value == ""; });
 			$('.character-names:enabled').each(function(index) {
+		      	this.value = '';
+		    });
+		    $('.edit-faction-name').each(function(index) {
 		      	this.value = '';
 		    });
 		}
@@ -111,15 +115,6 @@ jQuery(document).ready(function() {
 		if (confirm('Are you sure you want to clear all player names?')) {
 			//var emptyCharacterNames = $('.character-names').filter(function() { return this.value == ""; });
 			$('.player-names:enabled').each(function(index) {
-		      	this.value = '';
-		    });
-		}
-	});
-	$('#clear-character-bio').click(function(e) {
-		e.preventDefault();
-		if (confirm('Are you sure you want to clear all characters bio?')) {
-			//var emptyCharacterNames = $('.character-names').filter(function() { return this.value == ""; });
-			$('.character-bio:enabled').each(function(index) {
 		      	this.value = '';
 		    });
 		}
@@ -145,5 +140,17 @@ jQuery(document).ready(function() {
 				window.location.replace("edit_project.php?action=add-faction");
 			}
         });
+	});
+	$(".character-bio").focus( function() { 
+		$(this).animate({
+			width: '250px',
+			height: '200px'
+		}, 500);
+	});
+	$(".character-bio").blur( function() { 
+		$(this).animate({
+			width: '200px',
+			height: '27px'
+		}, 500);
 	});
 });

@@ -172,8 +172,8 @@ if (isset($_SESSION['edit-project-save-message'])) {
 		<meta charset="UTF-8">	
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/bootstrap-tour.min.css">
 		<link rel="stylesheet" href="css/primary.css">
-		<link rel="stylesheet"  href="css/bootstrap-tour.min.css">
 		<script src="includes/jquery-1.9.0.min.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/includes/javascript_edit.js"></script>
@@ -190,12 +190,20 @@ if (isset($_SESSION['edit-project-save-message'])) {
 		a.delete_faction i, i.delete-character {
 			color: #ff0000;
 		}
-		a.toggle_character, #random-names, #add-faction, #clear-character-names, #clear-player-names, #clear-character-bio {
-			float: left;
+		a.toggle_character, #random-names, #add-faction, #clear-all-names, #clear-player-names {
+			/*float: left;*/
+			vertical-align: -4px;
 			margin-right: 10px;
 		}
 		.edit-project>ul>li {
 			padding-left: 25px;
+		}
+		#edit-actions li {
+			display: inline;
+		}
+		#edit-actions {
+			margin-left: -25px;
+			margin-top: 20px;
 		}
 		</style>
 	</head>
@@ -211,7 +219,7 @@ if (isset($_SESSION['edit-project-save-message'])) {
 			<li><a href="load.php">Open</a></li>
 			<li class="selected"><a href="edit_project.php">Edit Project</a></li>
 			<li id="nav-grid"><a href="grid.php">Grid</a></li>
-			<li><a href="character_card.php">Character Cards</a></li>
+			<li><a href="character_card.php" target="_blank">Character Cards</a></li>
 			<li><a href="print.php" target="_blank">Print CC's</a></li>
 		</ul>
 		<div id="grid_container">	
@@ -236,30 +244,28 @@ if (isset($_SESSION['edit-project-save-message'])) {
 					<input type="text" name="project_name" value="<?php echo $activeProject['project_name'];?>" id="project-name"></input>
 					&nbsp;&nbsp;&nbsp;Active factions: <span id="faction-count"><?php echo ($activeProject['faction_qty'] - count($deleted_factions));?></span> / <span id="faction-limit"><?php echo FACTION_LIMIT; ?></span>
 				</h3>
+				<ul id="edit-actions">
 				<?php if ($activeProject['faction_qty'] < FACTION_LIMIT) : ?>
-				<p id="add-faction-container">
-					<a id="add-faction"><i class="fa fa-plus fa-2x"></i></a>Add another faction
-				</p>
+				<li id="add-faction-container">
+					<button class="btn btn-primary btn-sm" id="add-faction"><i class="fa fa-plus fa-lg" style="color: #fff;"></i>&nbsp;&nbsp;Add another faction</button>
+				</li>
 				<?php endif; ?>
-				<p>
-					<a id="random-names"><i class="fa fa-random fa-2x"></i></a>Randomize Names
-				</p>
-				<p>
-					<a id="clear-character-names"><i class="fa fa-times fa-2x"></i></a>Clear all character names
-				</p>
-				<p>
-					<a id="clear-player-names"><i class="fa fa-times fa-2x"></i></a>Clear all player names
-				</p>
-				<p>
-					<a id="clear-character-bio"><i class="fa fa-times fa-2x"></i></a>Clear all characters Bio
-				</p>
-				<br >
+				<li>
+					<button class="btn btn-primary btn-sm" id="random-names"><i class="fa fa-random fa-lg" style="color: #fff;"></i>&nbsp;&nbsp;Randomize character names</button>
+				</li>
+				<li>
+					<button class="btn btn-primary btn-sm" id="clear-all-names"><i class="fa fa-times fa-lg" style="color: #fff;"></i>&nbsp;&nbsp;Clear all character and faction names</button>
+				</li>
+				<li>
+					<button class="btn btn-primary btn-sm" id="clear-player-names"><i class="fa fa-times fa-lg" style="color: #fff;"></i>&nbsp;&nbsp;Clear all player names</button>
+				</li>
+				</ul>
 				<?php foreach ($character_data as $faction_num => $faction_characters) : ?>
 				<div id="faction_<?php echo $faction_num;?>">
 				<a title="Delete Faction" class="delete_faction" id="delete_faction_<?php echo $faction_num; ?>" data-faction-id="<?php echo $factions[$faction_num]['faction_id'];?>" data-faction-name="<?php echo $factions[$faction_num]['faction_name'];?>"><i class="fa fa-times fa-2x"></i></a>
 				&nbsp;
 				<strong>Faction:</strong>
-				<input type="text" id="faction_name_<?php echo $faction_num;?>" name="names[<?php echo $faction_num; ?>][faction_name]" class="edit" value="<?php echo @$factions[$faction_num]['faction_name'];?>"></input>
+				<input type="text" id="faction_name_<?php echo $faction_num;?>" name="names[<?php echo $faction_num; ?>][faction_name]" class="edit edit-faction-name" value="<?php echo @$factions[$faction_num]['faction_name'];?>"></input>
 				<!-- &nbsp;&nbsp;&nbsp;Number of Characters: <?php echo count($faction_characters); ?> / <?php echo CHARACTER_LIMIT; ?>-->
 				<br >
 				<br >
@@ -299,8 +305,6 @@ if (isset($_SESSION['edit-project-save-message'])) {
 						<input class="character-names" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][character_name]" value="<?php echo $character['character_name'];?>"></input>
 						&nbsp;&nbsp;Player:
 						<input class="player-names" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][player_name]" value="<?php echo $character['player_name'];?>"></input>
-						&nbsp;&nbsp;Bio:
-						<input class="character-bio" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][character_bio]" value="<?php echo $character['character_bio'];?>"></input>
 					</li>
 				<?php endforeach; ?>
 				</ul>
@@ -329,8 +333,6 @@ if (isset($_SESSION['edit-project-save-message'])) {
 					?>
 					<li id="character_<?php echo $character['character_id'];?>">
 						<a title="Restore Character" class="toggle_character" data-action="restore" data-character-id="<?php echo $character['character_id'];?>" data-character-faction="<?php echo $faction_num;?>" data-character-num="<?php echo $character_num;?>" data-character-name="<?php echo $character['character_name'];?>"><i class="fa fa-undo fa-lg restore-character"></i></a>
-						&nbsp;Character:
-						<input disabled class="character-names" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][character_name]" value="<?php echo $character['character_name'];?>"></input>
 						&nbsp;&nbsp;Priority:
 						<select disabled name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][priority]">
 							<option value="0" <?php echo $option0;?>>None</option>
@@ -339,10 +341,10 @@ if (isset($_SESSION['edit-project-save-message'])) {
 							<option value="3" <?php echo $optionC;?>>C</option>
 							<option value="4" <?php echo $optionD;?>>D</option>
 						</select>
+						&nbsp;Character:
+						<input disabled class="character-names" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][character_name]" value="<?php echo $character['character_name'];?>"></input>
 						&nbsp;&nbsp;Player:
 						<input disabled class="player-names" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][player_name]" value="<?php echo $character['player_name'];?>"></input>
-						&nbsp;&nbsp;Bio:
-						<input disabled class="character-bio" type="text" name="names[<?php echo $faction_num;?>][<?php echo $character_num;?>][character_bio]" value="<?php echo $character['character_bio'];?>"></input>
 					</li>
 					<?php endforeach ; ?>
 					<?php endif; ?>

@@ -111,24 +111,28 @@ if ( ! empty($_POST['opinion_word']) && isset($_POST['opinion_text'])) {
 				<?php echo $note_text;?><br>
 			</div>
 		</div>
-		<div class="row">
-			<form autocomplete="off" enctype="multipart/form-data" action="input.php?type=<?php echo $type;?>&bearer=<?php echo $bearer_id;?>&receiver=<?php echo $receiver_id;?>" novalidate="" name="input" method="POST">
-				<div class="col-md-6">
-				<?php foreach ($opinionWords as $key => $value) :
-					$checked = ( ! empty($opinion[$type]['opinion_word']) && $key == $opinion[$type]['opinion_word']) ? 'checked="checked"' : '';
-				?>
-					<input <?php echo $checked;?> type="radio" name="opinion_word" value="<?php echo $key;?>" class="opinion">&nbsp;<?php echo $value;?><br>
-				<?php $checked = (empty($opinion[$type]['opinion_word'])) ? 'checked="checked"' : ''; ?>
-				<?php endforeach; ?>
-				<input <?php echo $checked;?> type="radio" name="opinion_word" value="no_opinion" class="opinion">&nbsp;<?php echo $noOpinionText; ?><br>
-				<br />
-				<button type="submit" class="btn btn-primary btn-lg" id="save-opinion">Save</button>
+		<form autocomplete="off" enctype="multipart/form-data" action="input.php?type=<?php echo $type;?>&bearer=<?php echo $bearer_id;?>&receiver=<?php echo $receiver_id;?>" novalidate="" name="input" method="POST">
+			<div class="row">
+				<div class="col-xs-6 col-md-4">
+					<?php foreach ($opinionWords as $key => $value) :
+						$checked = ( ! empty($opinion[$type]['opinion_word']) && $key == $opinion[$type]['opinion_word']) ? 'checked="checked"' : '';
+					?>
+						<input <?php echo $checked;?> type="radio" name="opinion_word" value="<?php echo $key;?>" class="opinion">&nbsp;<?php echo $value;?><br>
+					<?php $checked = (empty($opinion[$type]['opinion_word'])) ? 'checked="checked"' : ''; ?>
+					<?php endforeach; ?>
+					<input <?php echo $checked;?> type="radio" name="opinion_word" value="no_opinion" class="opinion">&nbsp;<?php echo $noOpinionText; ?><br>
+					<br />
 				</div>
-				<div class="col-md-6">
-					<textarea <?php echo ($checked) ? 'disabled' : '';?> placeholder="Additional Notes" name="opinion_text" rows="10" cols="50" id="opinion-text" data-opinion-text="<?php echo ( ! empty($opinion[$type]['opinion_text'])) ? $opinion[$type]['opinion_text'] : '';?>"><?php echo ( ! empty($opinion[$type]['opinion_text'])) ? $opinion[$type]['opinion_text'] : '';?></textarea>	
+				<div class="col-md-4">
+					<textarea <?php echo ($checked) ? 'disabled' : '';?> placeholder="Additional Notes" name="opinion_text" rows="10" cols="30" id="opinion-text" data-opinion-text="<?php echo ( ! empty($opinion[$type]['opinion_text'])) ? $opinion[$type]['opinion_text'] : '';?>"><?php echo ( ! empty($opinion[$type]['opinion_text'])) ? $opinion[$type]['opinion_text'] : '';?></textarea>	
 				</div>
-			</form>
-		</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<button type="submit" class="btn btn-primary btn-sm" id="save-opinion">Save</button>
+				</div>
+			</div>
+		</form>
 	</div>
 </body>
 <script type="text/javascript">

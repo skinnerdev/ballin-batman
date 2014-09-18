@@ -36,8 +36,8 @@ if ( ! empty($_POST)) {
 <head>
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/bootstrap-tour.min.css">
 	<link rel="stylesheet" href="css/primary.css">
-	<link rel="stylesheet"  href="css/bootstrap-tour.min.css">
 	<script src="includes/jquery-1.9.0.min.js"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="javascript/bootstrap-tour.min.js"></script>
@@ -59,7 +59,7 @@ if ( ! empty($_POST)) {
 			<li><a href="load.php">Open</a></li>
 			<li><a href="edit_project.php">Edit Project</a></li>
 			<li><a href="grid.php">Grid</a></li>
-			<li><a href="character_card.php">Character Cards</a></li>
+			<li><a href="character_card.php" target="_blank">Character Cards</a></li>
 			<li><a href="print.php" target="_blank">Print CC's</a></li>
 		</ul>
 		<div id="grid_container">

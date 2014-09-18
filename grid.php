@@ -153,8 +153,8 @@ foreach ($display_data as $data) {
 	<head>
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/bootstrap-tour.min.css">
 		<link rel="stylesheet" href="css/primary.css">
-		<link rel="stylesheet"  href="css/bootstrap-tour.min.css">
 		<script src="includes/jquery-1.9.0.min.js"></script>
 		<script type="text/javascript" src="/includes/colorbox.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -180,13 +180,13 @@ foreach ($display_data as $data) {
 .grid-columns {
 	position:absolute;
 	left:0px;
-	top:85px;
+	top:69px;
 	height:<?php echo ($rowCount * 48) + 96;?>px;
 	width:82px;
 	background:#104E8B;
-	z-index:999;
+	/*z-index:999;*/
 	opacity:.7;
-	 visibility:hidden;
+	visibility:hidden;
 }
 #grid_container>.columnfaction {left:132px;}
 <?php
@@ -209,12 +209,12 @@ for ($count = 1; $count <= $rowCount; $count++) {
 	height:48px;
 	width:<?php echo ($columnCount * 82) + 164;?>px;
 	background:red;
-	z-index:999;
+	/*z-index:999;*/
 	opacity:.7;
 	visibility:hidden;
 }
 <?php
-$top = 133; 
+$top = 117; 
 for ($count = 1; $count <= $rowCount; $count++) {
 	$top += 48;
 	echo "#grid_container>.row" . $count . " {top: {$top}px;}\n";
@@ -291,7 +291,7 @@ for ($columnNum = 0; $columnNum < $columnCount; $columnNum ++) {
 
 				?>
 				</select>&nbsp;&nbsp;
-				<input class="submit_button" type="submit" value="Update">
+				<input class="btn btn-primary" type="submit" value="Update">
 				<button id="tour-start-grid" class="btn btn-primary" style="float:right;"><i class="fa fa-question-circle" style="color: #ffffff;"></i>&nbsp;Show the Tour</button>
 				</form>
 				<br >
@@ -335,10 +335,13 @@ for ($columnNum = 0; $columnNum < $columnCount; $columnNum ++) {
 						$letter = $alpha[$count];
 						$count++;
 						$class = '';
+						if ($source['character']['character_id'] == $target_id) {
+							$class = 'block-self';
+						}
 						?>
-						<div id="block<?php echo $row . $letter;?>" class="block <?php echo $class;?>">
+						<div id="block<?php echo $row . $letter;?>" class="<?php echo $class;?> block">
 							<?php if ($source['character']['character_id'] == $target_id) : ?>
-							SELF
+							<a class="iframe" href="character_bio.php?character=<?php echo $source['character']['character_id'];?>">SELF</a>
 							<?php else : ?>
 							<a class="iframe" href="input.php?type=c2c&bearer=<?php echo $source['character']['character_id'];?>&receiver=<?php echo $target_id;?>"><?php echo $target['opinion'];?></a>
 							<?php endif; ?>
@@ -352,12 +355,11 @@ for ($columnNum = 0; $columnNum < $columnCount; $columnNum ++) {
 				<div class="columnfaction grid-columns"></div>
 				<?php for ($columnNum = 0; $columnNum < $columnCount; $columnNum++) {
 					$letter = $alpha[$columnNum]; ?>
-					<div class="column<?php echo $letter;?> grid-columns"></div>
+				<div class="column<?php echo $letter;?> grid-columns"></div>
 				<?php } ?>
 				<?php for ($rowNum = 0; $rowNum < $rowCount; $rowNum++) { ?>
-					<div class="row<?php echo $rowNum + 1;?>" id="row-<?php echo $rowNum + 1;?>"></div>
+				<div class="row<?php echo $rowNum + 1;?>" id="row-<?php echo $rowNum + 1;?>"></div>
 				<?php } ?>
-
 				<?php else: ?>
 
 				<p>No factions configured or all factions deleted.</p>

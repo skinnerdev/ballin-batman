@@ -1,6 +1,5 @@
 @charset "utf-8";
 /* Menu items */
-
 .logo {
 	margin: 10px;
 }
@@ -78,12 +77,12 @@ ul li input[type="number"].small_text {
 	font-size:14pt;
 }
 
-input[type="submit"] {
+/*input[type="submit"] {
 	min-width:150px;
 	height:50px;
 	background:#306EFF;
 	font-size:24pt
-}
+}*/
 
 /* Containers */
 body {
@@ -138,7 +137,8 @@ footer {
 	padding-top:10px;
 	border:1px solid black;
 	margin: 2px;
-	z-index:1000;
+	/*z-index:1100;*/
+	z-index:1;
 	overflow:hidden;
 	line-height: 13px;
 	font-size: 14px;
@@ -234,5 +234,18 @@ text-decoration: none;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);
 }
 
+.tour-backdrop {
+	opacity: 0.4;
+}
+.tour-step-backdrop {
+	z-index: 1101;
+}
 
+select[disabled] {
+    color:#000;
+    background-color: #EBEBE4;
+}
 
+.block-self {
+	background: #0ACCFF;
+}

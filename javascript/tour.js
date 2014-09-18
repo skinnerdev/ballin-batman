@@ -80,7 +80,7 @@ $(function() {
             element: "[data-char-num='1-1']",
             placement: "top",
             title: "Edit Project",
-            content: "Here you can change the character's priority, name, enter the name of the player playing this character, as well as the characters bio.",
+            content: "Here you can change the character's priority, name, and the name of the player playing this character.",
             backdrop: true,
         }, {
             // 8
@@ -127,7 +127,6 @@ $(function() {
             orphan: true,
             title: "Edit Project",
             content: "Excellent! The faction has been restored.",
-            prev: 10
         }, {
             // 13
             path: "/edit_project.php",
@@ -135,6 +134,7 @@ $(function() {
             placement: "top",
             title: "Edit Project",
             content: "Clicking on this will allow you to disable or enable the character simliar to disabling or enabling a faction.",
+            prev: 10
         }, {
             // 14
             path: "/edit_project.php",
@@ -155,50 +155,71 @@ $(function() {
             element: "#random-names",
             placement: "top",
             title: "Edit Project",
-            content: "Clicking this will clear out all the character names and fill them with random names. The changes will only be saved if you click the Save Project button.",
+            content: "Clicking this will clear all the character names and fill them with random names. The changes will only be saved if you click the Save Project button.",
         }, {
             // 17
             path: "/edit_project.php",
-            element: "#clear-character-names",
+            element: "#clear-all-names",
             placement: "top",
             title: "Edit Project",
-            content: "These three options allow you to clear the character names, player names or the bio fields.",
-            onHidden: function(tour) {
+            content: "Clicking this will clear all the character and faction names.",
+        }, {
+            // 18
+            path: "/edit_project.php",
+            element: "#clear-player-names",
+            placement: "top",
+            title: "Edit Project",
+            content: "Clicking this will clear player names.",
+        }, {
+            // 19
+            path: "/edit_project.php",
+            element: "#save-project",
+            placement: "top",
+            title: "Edit Project",
+            content: "You can click here to save your changes.",
+            onShow: function(tour) {
                 if (user_viewed_tutorial) {
-                    tour.redirect('false');
+                    this.next = -1;
+                    this.keyboard = false;
                 }
             }
         }, {
-            // 18
+            // 20
             path: "/edit_project.php",
             element: "#nav-grid",
             placement: "bottom",
             title: "Edit Project",
-            content: "When your changes are saved, the Grid page is our next stop. Do not worry about saving now, you can come back later and make changes.",
+            content: "The Grid page is our next stop. Do not worry about saving now, you can come back later and make changes.",
         }, {
-            // 19
+            // 21
             // GRID PAGE
             path: "/grid.php",
             orphan: true,
             title: "Welcome to the Project Grid!",
             content: "This page allows you to set how the faction on the left feels towards the faction on the top.",
             backdrop: true,
+            onShow: function(tour) {
+                if (user_viewed_tutorial) {
+                    this.prev = -1;
+                    this.keyboard = false;
+                }
+            }
         }, {
-            // 20
+            // 22
             path: "/grid.php",
             element: "#faction-left",
             placement: "bottom",
             title: "Project Grid",
             content: "This faction will appear on the left side. Each character will be represented by a row on the grid.",
         }, {
-            // 21
+            // 23
             path: "/grid.php",
             element: "#faction-top",
             placement: "bottom",
             title: "Project Grid",
             content: "This faction will appear on the top. Each character will be represented by a column on the grid.",
         }, {
-            // 22
+            // 24
             path: "/grid.php",
             element: "#faction2faction",
             placement: "bottom",
@@ -206,7 +227,7 @@ $(function() {
             content: "You can change the left factions opinion of the top faction here.",
             backdrop: true,
         }, {
-            // 23
+            // 25
             path: "/grid.php",
             element: "#character_to_faction_1",
             placement: "bottom",
@@ -214,66 +235,73 @@ $(function() {
             content: "You can change this characters opinion of the top faction here.",
             backdrop: true,
         }, {
-            // 24
+            // 26
             path: "/grid.php",
             element: "#block1c",
             placement: "bottom",
             title: "Project Grid",
             content: "You can then click on any box in the grid to change how the character on the left feels towards the character on the top.",
         }, {
-            // 25
+            // 27
             path: "/grid.php",
             element: "#character_to_faction_1",
             placement: "bottom",
             title: "Project Grid",
             content: "If a left character does not have a specific opinion of a top character, then the left character's opinion of the top character's faction is used."
         }, {
-            // 26
+            // 28
             path: "/grid.php",
             element: "#faction2faction",
             placement: "right",
             title: "Project Grid",
             content: "If the left character has no specific opinion of the top character's faction, then the left faction's opinion of the top faction is used."
         }, {
-            // 27
+            // 29
             path: "/grid.php",
             orphan: true,
             title: "Project Grid",
             content: "With up to 12 factions and up to 12 characters per faction, that is 144 characters! There could be over 20,000 different opinions!"
         }, {
-            // 28
+            // 30
             path: "/grid.php",
             element: "#rowheader1",
             placement: "right",
             title: "Project Grid",
             content: "Clicking on any character names will open a character card sheet. This applies to both the left characters and the top characters.",
         }, {
-            // 29
+            // 31
             path: "/grid.php",
             element: "#character-cards",
             placement: "bottom",
             title: "Project Grid",
             content: "You can also see character cards here.",
         }, {
-            // 30
+            // 32
+            path: "/grid.php",
+            orphan: true,
+            title: "Project Grid",
+            content: "If you select the same faction for top and bottom, you can edit a character's bio. You will see the same character on the top and the left site. The intersecting cell will contain the word 'SELF'. Clicking on this cell will allow you to edit the biography of the character.",
+        }, {
+            // 33
             path: "/grid.php",
             element: "#print-character-cards",
             placement: "bottom",
             title: "Project Grid",
             content: "When your project is complete, you can click here to print or download all the information as a PDF.",
-            onHidden: function(tour) {
+            onShow: function(tour) {
                 if (user_viewed_tutorial) {
-                    tour.redirect('false');
+                    this.next = -1;
+                    this.keyboard = false;
                 }
             }
         }, {
-            // 31
+            // 34
             path: "/load.php",
             orphan: true,
             title: "Open Project",
             content: "As you create new projects, you can come here to open your saved projects or delete old projects. When deleting projects from this page, all the data will be deleted and cannot be undone."
         }, {
-            // 32
+            // 35
             path: "/new_project.php",
             orphan: true,
             title: "Tour Complete!",
@@ -283,8 +311,9 @@ $(function() {
         onEnd: function (tour) {
             $.get("admin_users.php?action=tutorial_end&user_id=" + user_id, function(data) {});
         }
-    }).init();
+    });
     if (user_viewed_tutorial == 0) {
+        tour.init();
         tour.start(true);
     }
 
@@ -294,11 +323,13 @@ $(function() {
     });
     $(document).on("click", "#tour-start-edit", function(e) {
         e.preventDefault();
+        tour.init();
         tour.setCurrentStep(4);
         tour.start(true);
     });
     $(document).on("click", "#tour-start-grid", function(e) {
         e.preventDefault();
+        tour.init();
         tour.setCurrentStep(19);
         tour.start(true);
     });

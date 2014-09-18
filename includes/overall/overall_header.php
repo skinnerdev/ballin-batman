@@ -6,7 +6,7 @@
 	<meta name="description" content="A tool for LARP. Create character factions and see their interactions - then print character cards.">
     <meta charset="UTF-8">	
     <link rel="stylesheet" href="css/screen.css">
-	<script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
+	<script src="includes/jquery-1.9.0.min.js"></script>
 	<!--<script type="text/javascript" src="/includes/overall/javascript.js"></script>-->
 </head>
 <body>
