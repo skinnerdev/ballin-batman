@@ -3,10 +3,11 @@
 	<div class="inner">
 		<div class="profile">		
 		<?php
+		if(empty($user_data['profile']) === true) {
+			echo 'Upload a Profile Picture<br>';
+		}
 		if (isset($_FILES['profile']) === true) {
 			if (empty($_FILES['profile']['name']) === true) {
-				echo 'Upload a Profile Picture<br>';
-			} else {
 				$allowed = array('jpg', 'jpg', 'gif', 'png');
 				$file_name = $_FILES['profile']['name'];  //file name
 				$file_extn = strtolower(end(explode('.', $file_name)));  //the last word after the last period = the extension

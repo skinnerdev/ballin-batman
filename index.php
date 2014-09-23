@@ -2,7 +2,7 @@
 include 'core/init.php';
 $page = 'home';
 include 'includes/overall/overall_header.php';
-$status = (SITE_STATUS == ALPHA) ? 'Alpha' : 'Beta';
+$status = (SITE_STATUS == BETA) ? 'Alpha' : 'Beta';
 ?>
 <div itemscope itemtype="http://schema.org/WebApplication">
 	<h1>Welcome to the <span itemprop="name">Factionizer</span>.</h1>
@@ -14,7 +14,7 @@ $status = (SITE_STATUS == ALPHA) ? 'Alpha' : 'Beta';
 <?php
 if (SITE_STATUS != RELEASE) {
 	if ( ! is_logged_in()) {
-		echo '<h2>To sign up for the Beta test, please sign in or register!</h2>';
+		echo '<h2>To sign up for the Beta test, please sign in or <a href=register.php>register!</a></h2>';
 	} else {
 		if ( ! user_has_beta()) {
 			echo '<h2><p>You can sign up for the beta <a href=beta.php>HERE</a>.</p></h2>';

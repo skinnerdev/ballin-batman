@@ -27,7 +27,7 @@ if (empty($_POST) === false) {
 	//print_r($errors);
 	
 } else {
-	$errors[] = 'No data recieved';
+	$errors[] = 'No data received';
 }
 
 include 'includes/overall/overall_header.php';

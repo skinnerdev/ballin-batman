@@ -74,10 +74,11 @@ if (isset($_SESSION['delete-project-message'])) {
 				<li><a href="index.php">Home</a></li>
 				<li><a href="new_project.php">New</a></li>
 				<li class="selected"><a href="load.php">Open</a></li>
-				<li><a href="edit_project.php">Edit Project</a></li>
+				<li><a href="edit_project.php">Edit Active</a></li>
 				<li><a href="grid.php">Grid</a></li>
-				<li><a href="character_card.php" target="_blank">Character Cards</a></li>
+				<li><a href="character_card.php">Character Cards</a></li>
 				<li><a href="print.php" target="_blank">Print CC's</a></li>
+				<li><a href="tutorial.php" target="_blank">Tutorial</a></li>
 			</ul>
 			<div id="grid_container">
 				<?php if ( ! empty($message)) {

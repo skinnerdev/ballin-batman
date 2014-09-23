@@ -1,0 +1,115 @@
+[24-Aug-2014 02:41:23 America/New_York] PHP Fatal error:  Call to undefined function getProject() in /home/faction/public_html/core/init.php on line 31
+[21-Sep-2014 17:23:34 America/New_York] PHP Parse error:  syntax error, unexpected 'endif' (T_ENDIF) in /home/faction/public_html/includes/overall/overall_header.php on line 29
+[21-Sep-2014 17:23:35 America/New_York] PHP Parse error:  syntax error, unexpected 'endif' (T_ENDIF) in /home/faction/public_html/includes/overall/overall_header.php on line 29
+[21-Sep-2014 17:39:49 America/New_York] PHP Parse error:  syntax error, unexpected 'var' (T_VAR) in /home/faction/public_html/includes/overall/overall_header.php on line 33
+[21-Sep-2014 17:39:49 America/New_York] PHP Parse error:  syntax error, unexpected 'var' (T_VAR) in /home/faction/public_html/includes/overall/overall_header.php on line 33
+[21-Sep-2014 17:40:17 America/New_York] PHP Parse error:  syntax error, unexpected 'var' (T_VAR) in /home/faction/public_html/includes/overall/overall_header.php on line 33
+[21-Sep-2014 17:40:18 America/New_York] PHP Parse error:  syntax error, unexpected 'var' (T_VAR) in /home/faction/public_html/includes/overall/overall_header.php on line 33
+[21-Sep-2014 17:41:41 America/New_York] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/faction/public_html/includes/overall/overall_header.php on line 40
+[21-Sep-2014 17:41:41 America/New_York] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/faction/public_html/includes/overall/overall_header.php on line 40
+[21-Sep-2014 17:41:53 America/New_York] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/faction/public_html/includes/overall/overall_header.php on line 40
+[21-Sep-2014 17:41:53 America/New_York] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/faction/public_html/includes/overall/overall_header.php on line 40
+[21-Sep-2014 17:41:57 America/New_York] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/faction/public_html/includes/overall/overall_header.php on line 40
+[21-Sep-2014 17:41:58 America/New_York] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/faction/public_html/includes/overall/overall_header.php on line 40
+[21-Sep-2014 17:42:00 America/New_York] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/faction/public_html/includes/overall/overall_header.php on line 40
+[21-Sep-2014 17:42:01 America/New_York] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/faction/public_html/includes/overall/overall_header.php on line 40
+[21-Sep-2014 17:59:51 America/New_York] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in /home/faction/public_html/includes/overall/overall_header.php on line 34
+[21-Sep-2014 17:59:51 America/New_York] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in /home/faction/public_html/includes/overall/overall_header.php on line 34
+[21-Sep-2014 17:59:56 America/New_York] PHP Parse error:  syntax error, unexpected '<' in /home/faction/public_html/includes/overall/overall_header.php on line 36
+[21-Sep-2014 17:59:57 America/New_York] PHP Parse error:  syntax error, unexpected '<' in /home/faction/public_html/includes/overall/overall_header.php on line 36
+[21-Sep-2014 18:00:48 America/New_York] PHP Parse error:  syntax error, unexpected end of file in /home/faction/public_html/includes/overall/overall_header.php on line 58
+[21-Sep-2014 18:00:48 America/New_York] PHP Parse error:  syntax error, unexpected end of file in /home/faction/public_html/includes/overall/overall_header.php on line 58
+[21-Sep-2014 18:56:53 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 18:56:58 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 18:57:38 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 18:57:51 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 18:57:52 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 18:57:53 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 18:57:54 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 18:57:54 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 18:59:21 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 19:00:40 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 19:04:59 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 19:05:37 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 19:06:13 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 279
+[21-Sep-2014 19:06:14 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 279
+[21-Sep-2014 19:06:15 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 279
+[21-Sep-2014 19:06:48 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 19:07:12 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 19:07:55 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 280
+[21-Sep-2014 19:08:48 America/New_York] PHP Warning:  include(file_with_errors.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 19:08:48 America/New_York] PHP Warning:  include(): Failed opening 'file_with_errors.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 19:09:03 America/New_York] PHP Parse error:  syntax error, unexpected '`' in /home/faction/public_html/grid.php on line 278
+[21-Sep-2014 19:12:20 America/New_York] PHP Warning:  include(new-project.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 19:12:20 America/New_York] PHP Warning:  include(): Failed opening 'new-project.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 19:37:08 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/faction/public_html/core/functions/general.php on line 15
+[21-Sep-2014 19:37:08 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/faction/public_html/core/functions/general.php on line 15
+[21-Sep-2014 19:40:55 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/faction/public_html/core/functions/general.php on line 15
+[21-Sep-2014 19:40:56 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/faction/public_html/core/functions/general.php on line 15
+[21-Sep-2014 19:41:50 America/New_York] PHP Notice:  Undefined variable: user_data in /home/faction/public_html/core/functions/general.php on line 10
+[21-Sep-2014 19:44:27 America/New_York] PHP Notice:  Undefined variable: user_data in /home/faction/public_html/core/functions/general.php on line 10
+[21-Sep-2014 19:45:16 America/New_York] PHP Notice:  Undefined variable: user_data in /home/faction/public_html/core/functions/general.php on line 10
+[21-Sep-2014 19:46:05 America/New_York] PHP Parse error:  syntax error, unexpected end of file in /home/faction/public_html/core/functions/general.php on line 45
+[21-Sep-2014 19:46:05 America/New_York] PHP Parse error:  syntax error, unexpected end of file in /home/faction/public_html/core/functions/general.php on line 45
+[21-Sep-2014 19:46:08 America/New_York] PHP Parse error:  syntax error, unexpected end of file in /home/faction/public_html/core/functions/general.php on line 45
+[21-Sep-2014 19:46:08 America/New_York] PHP Parse error:  syntax error, unexpected end of file in /home/faction/public_html/core/functions/general.php on line 45
+[21-Sep-2014 19:46:09 America/New_York] PHP Parse error:  syntax error, unexpected end of file in /home/faction/public_html/core/functions/general.php on line 45
+[21-Sep-2014 19:46:10 America/New_York] PHP Parse error:  syntax error, unexpected end of file in /home/faction/public_html/core/functions/general.php on line 45
+[21-Sep-2014 20:09:38 America/New_York] PHP Parse error:  syntax error, unexpected end of file in /home/faction/public_html/core/functions/general.php on line 45
+[21-Sep-2014 20:12:03 America/New_York] PHP Parse error:  syntax error, unexpected end of file in /home/faction/public_html/core/functions/general.php on line 45
+[21-Sep-2014 20:12:03 America/New_York] PHP Parse error:  syntax error, unexpected end of file in /home/faction/public_html/core/functions/general.php on line 45
+[21-Sep-2014 20:12:21 America/New_York] PHP Parse error:  syntax error, unexpected end of file in /home/faction/public_html/core/functions/general.php on line 10
+[21-Sep-2014 20:13:40 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/faction/public_html/core/functions/general.php on line 17
+[21-Sep-2014 20:13:41 America/New_York] PHP Parse error:  syntax error, unexpected '}' in /home/faction/public_html/core/functions/general.php on line 17
+[21-Sep-2014 20:18:08 America/New_York] PHP Notice:  Undefined variable: user_data in /home/faction/public_html/core/functions/general.php on line 12
+[21-Sep-2014 20:22:42 America/New_York] PHP Notice:  Undefined variable: user_data in /home/faction/public_html/core/functions/general.php on line 12
+[21-Sep-2014 20:22:51 America/New_York] PHP Notice:  Undefined variable: user_data in /home/faction/public_html/core/functions/general.php on line 12
+[21-Sep-2014 20:22:52 America/New_York] PHP Notice:  Undefined variable: user_data in /home/faction/public_html/core/functions/general.php on line 12
+[21-Sep-2014 20:23:05 America/New_York] PHP Notice:  Undefined variable: user_data in /home/faction/public_html/core/functions/general.php on line 12
+[21-Sep-2014 20:23:56 America/New_York] PHP Notice:  Undefined variable: user_data in /home/faction/public_html/core/functions/general.php on line 12
+[21-Sep-2014 20:25:06 America/New_York] PHP Notice:  Undefined variable: user_data in /home/faction/public_html/core/functions/general.php on line 12
+[21-Sep-2014 20:25:08 America/New_York] PHP Notice:  Undefined variable: user_data in /home/faction/public_html/core/functions/general.php on line 12
+[21-Sep-2014 20:25:44 America/New_York] PHP Notice:  Undefined variable: session_user_id in /home/faction/public_html/core/functions/general.php on line 11
+[21-Sep-2014 20:26:38 America/New_York] PHP Warning:  include(general.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 20:26:38 America/New_York] PHP Warning:  include(): Failed opening 'general.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 20:26:58 America/New_York] PHP Warning:  include(include/general.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 20:26:58 America/New_York] PHP Warning:  include(): Failed opening 'include/general.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 20:27:14 America/New_York] PHP Warning:  include(includes/general.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 20:27:14 America/New_York] PHP Warning:  include(): Failed opening 'includes/general.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 20:28:46 America/New_York] PHP Fatal error:  Call to undefined function is_logged_in() in /home/faction/public_html/core/functions/general.php on line 7
+[21-Sep-2014 20:29:18 America/New_York] PHP Warning:  require(functions/users.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 20:29:18 America/New_York] PHP Fatal error:  require(): Failed opening required 'functions/users.php' (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 20:29:51 America/New_York] PHP Warning:  require(database.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 20:29:51 America/New_York] PHP Fatal error:  require(): Failed opening required 'database.php' (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 20:29:52 America/New_York] PHP Warning:  require(database.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 20:29:52 America/New_York] PHP Fatal error:  require(): Failed opening required 'database.php' (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 20:31:14 America/New_York] PHP Warning:  include(database.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 20:31:14 America/New_York] PHP Warning:  include(): Failed opening 'database.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 4
+[21-Sep-2014 20:31:14 America/New_York] PHP Warning:  include(site_config.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 5
+[21-Sep-2014 20:31:14 America/New_York] PHP Warning:  include(): Failed opening 'site_config.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 5
+[21-Sep-2014 20:31:14 America/New_York] PHP Warning:  include(functions/password.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 6
+[21-Sep-2014 20:31:14 America/New_York] PHP Warning:  include(): Failed opening 'functions/password.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 6
+[21-Sep-2014 20:31:14 America/New_York] PHP Warning:  include(functions/users.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 7
+[21-Sep-2014 20:31:14 America/New_York] PHP Warning:  include(): Failed opening 'functions/users.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 7
+[21-Sep-2014 20:31:14 America/New_York] PHP Warning:  include(functions/general.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 8
+[21-Sep-2014 20:31:14 America/New_York] PHP Warning:  include(): Failed opening 'functions/general.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 8
+[21-Sep-2014 20:31:14 America/New_York] PHP Warning:  include(functions/project.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 9
+[21-Sep-2014 20:31:14 America/New_York] PHP Warning:  include(): Failed opening 'functions/project.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 9
+[21-Sep-2014 20:31:14 America/New_York] PHP Fatal error:  Call to undefined function protect_page() in /home/faction/public_html/test.php on line 10
+[21-Sep-2014 20:31:41 America/New_York] PHP Warning:  include(functions/password.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 6
+[21-Sep-2014 20:31:41 America/New_York] PHP Warning:  include(): Failed opening 'functions/password.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 6
+[21-Sep-2014 20:31:41 America/New_York] PHP Warning:  include(functions/users.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 7
+[21-Sep-2014 20:31:41 America/New_York] PHP Warning:  include(): Failed opening 'functions/users.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 7
+[21-Sep-2014 20:31:41 America/New_York] PHP Warning:  include(functions/general.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 8
+[21-Sep-2014 20:31:41 America/New_York] PHP Warning:  include(): Failed opening 'functions/general.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 8
+[21-Sep-2014 20:31:41 America/New_York] PHP Warning:  include(functions/project.php): failed to open stream: No such file or directory in /home/faction/public_html/test.php on line 9
+[21-Sep-2014 20:31:41 America/New_York] PHP Warning:  include(): Failed opening 'functions/project.php' for inclusion (include_path='.:/usr/local/php54/pear') in /home/faction/public_html/test.php on line 9
+[21-Sep-2014 20:31:41 America/New_York] PHP Fatal error:  Call to undefined function protect_page() in /home/faction/public_html/test.php on line 10
+[21-Sep-2014 20:32:44 America/New_York] PHP Notice:  Undefined variable: session_user_id in /home/faction/public_html/core/functions/general.php on line 11
+[21-Sep-2014 20:33:06 America/New_York] PHP Notice:  Undefined variable: session_user_id in /home/faction/public_html/core/functions/general.php on line 11
+[21-Sep-2014 20:33:07 America/New_York] PHP Notice:  Undefined variable: session_user_id in /home/faction/public_html/core/functions/general.php on line 11
+[21-Sep-2014 20:33:16 America/New_York] PHP Notice:  Undefined variable: session_user_id in /home/faction/public_html/core/functions/general.php on line 11
+[21-Sep-2014 20:34:48 America/New_York] PHP Notice:  Array to string conversion in /home/faction/public_html/core/functions/general.php on line 13
+[21-Sep-2014 20:35:07 America/New_York] PHP Notice:  Undefined index: active in /home/faction/public_html/core/functions/general.php on line 13
+[21-Sep-2014 20:35:13 America/New_York] PHP Notice:  Undefined index: active in /home/faction/public_html/core/functions/general.php on line 13
+[21-Sep-2014 20:35:52 America/New_York] PHP Notice:  Undefined index: active in /home/faction/public_html/core/functions/general.php on line 13

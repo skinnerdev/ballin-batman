@@ -4,8 +4,8 @@ session_start();
 require 'database.php';
 require 'site_config.php';
 require 'functions/password.php'; // BCRYPT hashing library
-require 'functions/general.php';
 require 'functions/users.php';
+require 'functions/general.php';
 require 'functions/project.php';
 
 $current_file = explode('/', $_SERVER['SCRIPT_NAME']);

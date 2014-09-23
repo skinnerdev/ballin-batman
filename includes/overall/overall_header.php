@@ -6,13 +6,12 @@
 	<meta name="description" content="A tool for LARP. Create character factions and see their interactions - then print character cards.">
     <meta charset="UTF-8">	
     <link rel="stylesheet" href="css/screen.css">
-	<script src="includes/jquery-1.9.0.min.js"></script>
 	<!--<script type="text/javascript" src="/includes/overall/javascript.js"></script>-->
 </head>
 <body>
 <header>
 	<div class="logo">
-		<img src="/images/Factionizerlogo.png">
+		<a href="index.php"><img src="/images/Factionizerlogo.png"></a>
 	</div>
 	<!-- <h1 class="logo">The Factionizer</h1> -->
 	<?php
@@ -25,21 +24,25 @@
 	?>
 	<ul class="menu">
 			<li <?php echo $home;?>><a href="index.php">Home</a></li>
-			<?php if (SITE_STATUS != RELEASE) : ?>
-			<li <?php echo $beta;?>><a href="beta.php">Beta Signup</a></li>
-			<?php endif; ?>
 			<li <?php echo $contact;?>><a href="contact.php">Contact us</a></li>
 			<?php
 				include 'includes/check_connect.php';
 				if (isset($_SESSION['user_id'])) {
-					if (
-						(SITE_STATUS == ALPHA && has_access($user_id, USER_TYPE_ADMIN)) || // Alpha Testing
-						(SITE_STATUS == BETA && user_has_beta()) || // Beta Testing
-						(SITE_STATUS == RELEASE) // Release
-					) {
-						echo '<li><a href="load.php">Open Project</a></li>';
+					$projects = get_project_list();
+					if (empty($projects)) {
+						echo '<li><a href="new_project.php">Create First Project</a></li>';
+					} else {
+						echo '
+						<li><a href="new_project.php">New</a></li>
+						<li><a href="load.php">Open</a></li>
+						<li><a href="edit_project.php">Edit Active</a></li>
+						<li><a href="grid.php">Grid</a></li>
+						<li id="character-cards"><a href="character_card.php" target="_blank">Character Cards</a></li>
+						<li><a href="print.php" target="_blank">Print Cards</a></li>
+						<li><a href="tutorial.php" target="_blank">Tutorial</a></li>';
+						
 					}
-				}
+				} else { echo '<li><a href="beta.php">Beta Signup</a></li>';}
 			?>
 	</ul>
 	<div class="clear"></div>
